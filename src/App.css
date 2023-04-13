@@ -167,7 +167,7 @@ html {
 .dropdown-table-menu li:hover {
   font-weight: 600;
 }
-input {
+.options-bar input {
   width: 28rem;
   padding: 0.8rem 1.2rem;
   font-size: 1.2rem;
@@ -177,6 +177,38 @@ input {
 }
 .icon-search {
   cursor: pointer;
+}
+.writen-query {
+  margin: 3rem 0 2rem 0;
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+}
+.writen-query label {
+  font-size: 1.4rem;
+}
+.writen-query input {
+  width: 55rem;
+  height: 4rem;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.4rem;
+  outline: none;
+  border-radius: 7px;
+  border: 1px solid #333;
+  color: green;
+}
+.writen-query button {
+  height: 4rem;
+  font-size: 1.4rem;
+  padding: 0 1rem;
+  border-radius: 7px;
+  border: 1px solid #333;
+  cursor: pointer;
+}
+.writen-query button:hover {
+  transform: scale(0.06);
 }
 /* ********************************** */
 /* ******* results container ******** */

@@ -26,7 +26,7 @@ function App() {
     "starts with",
     "ends with",
   ];
-  const [count, setCount] = useState(0);
+  const [query, setQuery] = useState("");
   const [isDisplaySearchBar, setIsDisplaySearchBar] = useState(false);
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
   const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
@@ -65,6 +65,13 @@ function App() {
   const handlePlayersFormSubmit = (event) => {
     event.preventDefault();
     console.log(checkedPlayersCols);
+  };
+  const handleQueryChange = (event) => {
+    setQuery(event.target.value);
+    console.log(query);
+  };
+  const handleQuerySubmit = () => {
+    console.log(query);
   };
   const displayTable = () => {
     setTableToDisplay([
@@ -262,18 +269,18 @@ function App() {
             </p>
             <div className="condition-block">
               <div>Col List</div>
-              <div class="dropdown">
+              <div className="dropdown">
                 <button
-                  class="btn btn-secondary dropdown-toggle"
+                  className="btn btn-secondary dropdown-toggle"
                   type="button"
                   data-bs-toggle="dropdown"
                   aria-expanded="false"
                 >
                   Dropdown button
                 </button>
-                <ul class="dropdown-menu">
+                <ul className="dropdown-menu">
                   {conditionList.map((condition, i) => (
-                    <li class="dropdown-item">{condition}</li>
+                    <li className="dropdown-item">{condition}</li>
                   ))}
                 </ul>
               </div>
@@ -311,7 +318,16 @@ function App() {
               name="search-outline"
             ></ion-icon>
           </div>
-          <section className="results">
+          <form className="writen-query">
+            <label>Query</label>
+            <input
+              placeholder="Write your query..."
+              value={query}
+              onChange={handleQueryChange}
+            />
+            <button onClick={handleQuerySubmit}>Submit</button>
+          </form>
+          <div className="results">
             <table>
               <thead>
                 <tr>
@@ -330,7 +346,7 @@ function App() {
                 ))}
               </tbody>
             </table>
-          </section>
+          </div>
         </section>
         {/* Section Graphs Container */}
 
