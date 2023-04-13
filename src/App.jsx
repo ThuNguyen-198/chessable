@@ -280,7 +280,9 @@ function App() {
                 </button>
                 <ul className="dropdown-menu">
                   {conditionList.map((condition, i) => (
-                    <li className="dropdown-item">{condition}</li>
+                    <li key={i} className="dropdown-item">
+                      {condition}
+                    </li>
                   ))}
                 </ul>
               </div>
