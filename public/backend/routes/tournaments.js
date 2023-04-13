@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
+const axios = require("axios");
 
 router.get("", async (req, res) => {
   await axios
