@@ -15,7 +15,15 @@
 html {
   font-size: 65.5%;
 }
-
+.text-icon {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  cursor: pointer;
+}
+.text-icon ion-icon {
+  font-size: 1rem;
+}
 /* ********************************** */
 /* ******** Main Navigation ********* */
 /* ********************************** */
@@ -32,7 +40,8 @@ html {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  border: 1px solid #333;
+  /* border-bottom: 1px solid #e0e0e0; */
+  box-shadow: 0 3px 30px #e0e0e0f4;
 }
 .app-name {
   font-size: 1.4rem;
@@ -61,19 +70,140 @@ html {
 /* ********************************** */
 .body {
   display: grid;
-  grid-template-columns: 3fr 1fr;
+  grid-template-columns: 1fr 3fr 1fr;
   justify-content: space-between;
 }
+
+/* ********************************** */
+/* ********* query container ******** */
+/* ********************************** */
+.query-container {
+  border-right: 1px solid #e0e0e0;
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  gap: 1.6rem;
+}
+.query-step {
+  padding: 1rem;
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+.query-table-list {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-left: 2rem;
+}
+.query-table-list li {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+}
+.query-table-list form {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-left: 1rem;
+}
+.query-table-list label {
+  width: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 1rem;
+}
+.query-table-list input {
+  width: fit-content;
+}
+.conditions ion-icon {
+  font-size: 1.4rem;
+}
+/* ********************************** */
+/* ******** content container ******* */
+/* ********************************** */
 .content-container {
   width: 100%;
+  position: relative;
 }
 .options-bar {
   width: 100%;
   display: flex;
+  align-items: center;
+  justify-content: flex-start;
   font-size: 1.4rem;
-  gap: 1rem;
+  gap: 2rem;
+  padding: 1rem;
+  font-weight: 500;
+  /* border-bottom: 1px solid #e0e0e0; */
+}
+.options-bar ion-icon {
+  font-size: 1.8rem;
+}
+
+.dropdown-table-menu {
+  text-decoration: none;
+  position: absolute;
+  top: 4rem;
+  left: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.8rem;
+  list-style: none;
+  transform: translateZ(1);
+  background-color: #e0e0e0;
+  width: 12rem;
+  border-radius: 7px;
   padding: 1rem 2rem;
 }
+.dropdown-table-menu li {
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.dropdown-table-menu li:hover {
+  font-weight: 600;
+}
+input {
+  width: 28rem;
+  padding: 0.8rem 1.2rem;
+  font-size: 1.2rem;
+  outline: none;
+  border-radius: 11px;
+  border: 1px solid #333;
+}
+.icon-search {
+  cursor: pointer;
+}
+/* ********************************** */
+/* ******* results container ******** */
+/* ********************************** */
+.results {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+}
+table {
+  border-collapse: collapse;
+  width: 90%;
+  color: #333;
+}
+th,
+td {
+  border: 1px solid #e0e0e0;
+  padding: 0.4rem 0.6rem;
+  font-size: 0.8rem;
+}
+th {
+  font-size: 1rem;
+}
+/* ********************************** */
+/* ******** graphs container ******** */
+/* ********************************** */
 .graphs-container {
   border-left: 1px solid #e0e0e0;
   min-height: 100vh;
