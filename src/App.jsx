@@ -1,7 +1,10 @@
 import { useState } from "react";
 import "./App.css";
+import "bootstrap/dist/css/bootstrap.css";
 
 function App() {
+  // Section Query
+  // Section Query - SELECT
   const playerKeys = [
     "playerID",
     "fName",
@@ -18,7 +21,51 @@ function App() {
     "totalLoses",
     "totalDraws",
   ];
-  const conditionList = [
+  const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
+  const [isDisplayToursCols, setIsDisplayToursCols] = useState(false);
+  const [isDisplayPlayersCols, setIsDisplayPlayersCols] = useState(false);
+  const [isDisplayOpeningsCols, setIsDisplayOpeningsCols] = useState(false);
+  const [isDisplaySponsorsCols, setIsDisplaySponsorsCols] = useState(false);
+  const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
+  const handleCheckboxPlayers = (event) => {
+    setCheckedPlayersCols({
+      ...checkedPlayersCols,
+      [event.target.name]: event.target.checked,
+    });
+  };
+  const handlePlayersFormSubmit = (event) => {
+    event.preventDefault();
+    console.log(checkedPlayersCols);
+  };
+  const displayQueryCols = (tableName) => {
+    if (tableName === "players") setIsDisplayPlayersCols(!isDisplayPlayersCols);
+    else if (tableName === "games") setIsDisplayGamesCols(!isDisplayGamesCols);
+    else if (tableName === "tournaments")
+      setIsDisplayToursCols(!isDisplayToursCols);
+    else if (tableName === "sponsors")
+      setIsDisplaySponsorsCols(!isDisplaySponsorsCols);
+    else if (tableName === "openings")
+      setIsDisplayOpeningsCols(!isDisplayOpeningsCols);
+  };
+
+  // Section Query - WHERE
+  const whereCols = [
+    "playerID",
+    "fName",
+    "lName",
+    "age",
+    "gender",
+    "phoneNo",
+    "address",
+    "rating",
+    "title",
+    "country",
+    "totalGames",
+    "totalWins",
+    "totalLoses",
+    "totalDraws",
+  ];
+  const whereParamList = [
     "=",
     ">=",
     "<=",
@@ -26,14 +73,23 @@ function App() {
     "starts with",
     "ends with",
   ];
-  const [query, setQuery] = useState("");
-  const [isDisplaySearchBar, setIsDisplaySearchBar] = useState(false);
+  const [numWhereRows, setNumWhereRows] = useState(0);
+  const [isDisplayWhereCols, setIsDisplayWhereCols] = useState(false);
+  const [isDisplayWhereParam, setIsDisplayWhereParam] = useState(false);
+  const displayWhereCols = () => {
+    setIsDisplayWhereCols(!isDisplayWhereCols);
+  };
+  const displayWhereParam = () => {
+    setIsDisplayWhereParam(!isDisplayWhereParam);
+  };
+  const addNumWhereRow = () => {
+    setNumWhereRows(numWhereRows + 1);
+  };
+
+  // Section Result
+  // Section Result - Nav
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
-  const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
-  const [isDisplayToursCols, setIsDisplayToursCols] = useState(false);
-  const [isDisplayPlayersCols, setIsDisplayPlayersCols] = useState(false);
-  const [isDisplayOpeningsCols, setIsDisplayOpeningsCols] = useState(false);
-  const [isDisplaySponsorsCols, setIsDisplaySponsorsCols] = useState(false);
+  const [isDisplaySearchBar, setIsDisplaySearchBar] = useState(false);
   const [tableToDisplay, setTableToDisplay] = useState([
     {
       playerID: "1",
@@ -52,27 +108,7 @@ function App() {
       totalDraws: "adw",
     },
   ]);
-  const [keys, setKeys] = useState([]);
-  const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
-  const [conditionQuery, setConditionQuery] = useState([]);
-
-  const handleCheckboxPlayers = (event) => {
-    setCheckedPlayersCols({
-      ...checkedPlayersCols,
-      [event.target.name]: event.target.checked,
-    });
-  };
-  const handlePlayersFormSubmit = (event) => {
-    event.preventDefault();
-    console.log(checkedPlayersCols);
-  };
-  const handleQueryChange = (event) => {
-    setQuery(event.target.value);
-    console.log(query);
-  };
-  const handleQuerySubmit = () => {
-    console.log(query);
-  };
+  const [resultTableKeys, setResultTableKeys] = useState([]);
   const displayTable = () => {
     setTableToDisplay([
       {
@@ -156,7 +192,7 @@ function App() {
         totalDraws: "adw",
       },
     ]);
-    setKeys(Object.keys(tableToDisplay[0]));
+    setResultTableKeys(Object.keys(tableToDisplay[0]));
     setIsDisplayTableMenu(!isDisplayTableMenu);
   };
   const displaySearchBar = () => {
@@ -167,16 +203,18 @@ function App() {
     setIsDisplayTableMenu(!isDisplayTableMenu);
     console.log(isDisplayTableMenu);
   };
-  const displayQueryCols = (tableName) => {
-    if (tableName === "players") setIsDisplayPlayersCols(!isDisplayPlayersCols);
-    else if (tableName === "games") setIsDisplayGamesCols(!isDisplayGamesCols);
-    else if (tableName === "tournaments")
-      setIsDisplayToursCols(!isDisplayToursCols);
-    else if (tableName === "sponsors")
-      setIsDisplaySponsorsCols(!isDisplaySponsorsCols);
-    else if (tableName === "openings")
-      setIsDisplayOpeningsCols(!isDisplayOpeningsCols);
+  // Section Result - Query Bar
+  const [query, setQuery] = useState("");
+  const handleQueryChange = (event) => {
+    setQuery(event.target.value);
+    console.log(query);
   };
+  const handleQuerySubmit = () => {
+    console.log(query);
+  };
+  // Section Graphs
+
+  // const [conditionQuery, setConditionQuery] = useState([]);
 
   return (
     <div className="app-container">
@@ -192,9 +230,9 @@ function App() {
         {/* Section Query Container */}
         <section className="query-container">
           <p className="options-bar">Query</p>
-          <div className="query-block">
-            <p className="query-step">Choose Columns</p>
-            <ul className="query-table-list">
+          <div className="select-block">
+            <p className="query-step">SELECT</p>
+            <ul className="select-table-list">
               <li>
                 <div
                   className="text-icon"
@@ -206,7 +244,7 @@ function App() {
               </li>
               <li>
                 <div
-                  className="text-icon"
+                  className="text-icon select-table"
                   onClick={() => displayQueryCols("players")}
                 >
                   Players
@@ -263,29 +301,59 @@ function App() {
             </ul>
           </div>
           <div className="query-block">
-            <p className="query-step text-icon conditions">
-              Conditions
-              <ion-icon name="add-circle-outline"></ion-icon>
+            <p className="query-step text-icon where">
+              WHERE
+              <ion-icon
+                name="add-circle-outline"
+                onClick={addNumWhereRow}
+              ></ion-icon>
             </p>
-            <div className="condition-block">
-              <div>Col List</div>
-              <div className="dropdown">
-                <button
-                  className="btn btn-secondary dropdown-toggle"
-                  type="button"
-                  data-bs-toggle="dropdown"
-                  aria-expanded="false"
-                >
-                  Dropdown button
-                </button>
-                <ul className="dropdown-menu">
-                  {conditionList.map((condition, i) => (
-                    <li key={i} className="dropdown-item">
-                      {condition}
-                    </li>
-                  ))}
-                </ul>
-              </div>
+            <div className="where-block">
+              {[...Array(numWhereRows)].map((row, index) => (
+                <form className="where-row" key={index}>
+                  <div className="where-col">
+                    <button
+                      className="text-icon"
+                      type="button"
+                      onClick={displayWhereCols}
+                    >
+                      Column
+                      <ion-icon name="chevron-down-outline"></ion-icon>
+                    </button>
+                    {isDisplayWhereCols ? (
+                      <ul className="where-col-dropdown">
+                        {whereCols.map((col, i) => (
+                          <li key={i}>{col}</li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <div className="where-param">
+                    <button
+                      className="text-icon"
+                      type="button"
+                      onClick={displayWhereParam}
+                    >
+                      equals
+                      <ion-icon name="chevron-down-outline"></ion-icon>
+                    </button>
+                    {isDisplayWhereParam ? (
+                      <ul className="where-param-dropdown">
+                        {whereParamList.map((condition, i) => (
+                          <li key={i} className="dropdown-item">
+                            {condition}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <></>
+                    )}
+                  </div>
+                  <input />
+                </form>
+              ))}
             </div>
           </div>
         </section>
@@ -321,7 +389,7 @@ function App() {
             ></ion-icon>
           </div>
           <form className="writen-query">
-            <label>Query</label>
+            {/* <label>Query</label> */}
             <input
               placeholder="Write your query..."
               value={query}
@@ -333,7 +401,7 @@ function App() {
             <table>
               <thead>
                 <tr>
-                  {keys.map((key) => (
+                  {resultTableKeys.map((key) => (
                     <th key={key}>{key}</th>
                   ))}
                 </tr>
@@ -341,7 +409,7 @@ function App() {
               <tbody>
                 {tableToDisplay.map((row, index) => (
                   <tr key={index}>
-                    {keys.map((key) => (
+                    {resultTableKeys.map((key) => (
                       <td key={key}>{row[key]}</td>
                     ))}
                   </tr>
@@ -354,7 +422,7 @@ function App() {
 
         <section className="graphs-container">
           <div className="graphs-header-bar">
-            <div>Graphs</div>
+            <div className="options-bar">Graphs</div>
             <ion-icon name="menu-outline"></ion-icon>
           </div>
         </section>
