@@ -4,7 +4,11 @@ const dotenv = require("dotenv");
 const axios = require("axios");
 
 router.get("/games", async (req, res) => {
-  res.json();
+  await axios
+    .get("https://gcp-test-7l6ho2jzjq-uc.a.run.app/games")
+    .then((results) => {
+      res.status(200).json(results.data);
+    });
 });
 
 module.exports = router;

@@ -5,11 +5,11 @@ const axios = require("axios");
 
 dotenv.config();
 
-router.get("", async (req, res) => {
+router.get("/players", async (req, res) => {
   await axios
     .get("https://gcp-test-7l6ho2jzjq-uc.a.run.app/players")
     .then((results) => {
-      console.log(results.data);
+      res.status(200).json(results.data);
     });
 });
 
