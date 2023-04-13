@@ -5,7 +5,7 @@ import "bootstrap/dist/css/bootstrap.css";
 function App() {
   // Section Query
   // Section Query - SELECT
-  const playerKeys = [
+  const playerCols = [
     "playerID",
     "fName",
     "lName",
@@ -21,17 +21,19 @@ function App() {
     "totalLoses",
     "totalDraws",
   ];
+  const gamesCols = ["ECO", "name", "moves"];
   const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
   const [isDisplayToursCols, setIsDisplayToursCols] = useState(false);
   const [isDisplayPlayersCols, setIsDisplayPlayersCols] = useState(false);
   const [isDisplayOpeningsCols, setIsDisplayOpeningsCols] = useState(false);
   const [isDisplaySponsorsCols, setIsDisplaySponsorsCols] = useState(false);
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
+  const [checkedGamesCols, setCheckedGamesCols] = useState([]);
   const handleCheckboxPlayers = (event) => {
-    setCheckedPlayersCols({
-      ...checkedPlayersCols,
-      [event.target.name]: event.target.checked,
-    });
+    setCheckedPlayersCols([...checkedPlayersCols, event.target.name]);
+  };
+  const handleCheckboxGames = (event) => {
+    setCheckedGamesCols([...checkedGamesCols, event.target.name]);
   };
   const handlePlayersFormSubmit = (event) => {
     event.preventDefault();
@@ -85,7 +87,49 @@ function App() {
   const addNumWhereRow = () => {
     setNumWhereRows(numWhereRows + 1);
   };
+  // Section Query - SUBMIT
+  const handleConvertToQuerySubmit = () => {
+    let queryString = "";
+    let selectString = "SELECT ";
+    let fromString = " FROM ";
 
+    let fromTableList = [];
+    //Handle SELECT STRING
+    if (checkedPlayersCols.length > 0) {
+      if (fromTableList.length > 0) selectString += ", ";
+      for (let i = 0; i < checkedPlayersCols.length; i++) {
+        if (i === checkedPlayersCols.length - 1)
+          selectString = selectString + checkedPlayersCols[i];
+        else selectString = selectString + checkedPlayersCols[i] + ", ";
+      }
+      fromTableList = [...fromTableList, "chessDB.players"];
+    }
+    if (checkedGamesCols.length > 0) {
+      if (fromTableList.length > 0) selectString += ", ";
+      for (let i = 0; i < checkedGamesCols.length; i++) {
+        if (i === checkedGamesCols.length - 1)
+          selectString = selectString + checkedGamesCols[i];
+        else selectString = selectString + checkedGamesCols[i] + ", ";
+      }
+      fromTableList = [...fromTableList, "chessDB.games"];
+    }
+    //Handle FROM STRING
+    console.log(fromTableList);
+    if (fromTableList.length === 1) fromString += fromTableList;
+    else {
+      for (let i = 0; i < fromTableList.length; i++) {
+        if (i === fromTableList.length - 1)
+          fromString = fromString + fromTableList[i];
+        else fromString = fromString + fromTableList[i] + " JOIN ";
+      }
+    }
+    //Handle querySring
+    console.log(selectString);
+    console.log(fromString);
+    console.log(queryString);
+    queryString = selectString + fromString;
+    setQuery(queryString);
+  };
   // Section Result
   // Section Result - Nav
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
@@ -252,7 +296,7 @@ function App() {
                 </div>
                 {isDisplayPlayersCols ? (
                   <form onSubmit={handlePlayersFormSubmit}>
-                    {playerKeys.map((col, index) => (
+                    {playerCols.map((col, index) => (
                       <label key={index}>
                         <input
                           type="checkbox"
@@ -263,21 +307,38 @@ function App() {
                         {col}
                       </label>
                     ))}
-                    <button type="submit">Confirm</button>
+                    {/* <button type="submit">Confirm</button> */}
                   </form>
                 ) : (
                   <></>
                 )}
               </li>
-
               <li>
                 <div
-                  className="text-icon"
+                  className="text-icon select-table"
                   onClick={() => displayQueryCols("games")}
                 >
                   Games
                   <ion-icon name="chevron-down-outline"></ion-icon>
                 </div>
+                {isDisplayGamesCols ? (
+                  <form>
+                    {gamesCols.map((col, index) => (
+                      <label key={index}>
+                        <input
+                          type="checkbox"
+                          name={col}
+                          checked={checkedGamesCols.col}
+                          onChange={handleCheckboxGames}
+                        />
+                        {col}
+                      </label>
+                    ))}
+                    {/* <button type="submit">Confirm</button> */}
+                  </form>
+                ) : (
+                  <></>
+                )}
               </li>
 
               <li>
@@ -356,6 +417,12 @@ function App() {
               ))}
             </div>
           </div>
+          <button
+            className="btn-convert-to-query-submit"
+            onClick={handleConvertToQuerySubmit}
+          >
+            Submit
+          </button>
         </section>
         {/* Section Content Container */}
         <section className="content-container">
