@@ -13,10 +13,6 @@ const playerRoute = require("./public/backend/routes/players");
 const tournamentRoute = require("./public/backend/routes/tournaments");
 const sponsorRoute = require("./public/backend/routes/sponsors");
 
-app.get("/", (req, res) =>
-  res.send("Try: /status, /warehouses, or /warehouses/2")
-);
-
 app.get("/status", (req, res) => res.send("Success."));
 
 //GET TABLES ROUTES
