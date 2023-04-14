@@ -82,27 +82,27 @@ html {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
-  gap: 1.6rem;
+  gap: 2rem;
 }
 .query-step {
-  padding: 1rem;
+  padding-left: 1rem;
   font-size: 1.2rem;
   font-weight: 400;
 }
 
 /* SELECT Block */
-.select-block {
-}
 .select-table-list {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 1rem;
 }
 .select-table-list li {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  justify-content: space-between;
   gap: 1rem;
 }
 .select-table-list form {
@@ -128,7 +128,7 @@ html {
 .where ion-icon {
   font-size: 1.4rem;
 }
-.where-block {
+.where-container {
   display: flex;
   flex-direction: column;
   gap: 1.2rem;
@@ -169,7 +169,7 @@ html {
   overflow: auto;
   list-style: none;
 }
-.where-block input {
+.where-container input {
   width: 100%;
   overflow: auto;
   height: 3rem;
@@ -178,11 +178,26 @@ html {
   overflow: auto;
   padding: 0 0.4rem;
 }
-.where-block input:focus {
+.where-container input:focus {
   border: 2px solid rgba(51, 51, 51, 0.585);
   outline: none;
 }
-
+/* Button Submit */
+.btn-convert-to-query-submit {
+  font-size: 1.2rem;
+  align-self: center;
+  border: 1px solid #333;
+  padding: 0.6rem 1.2rem;
+  border-radius: 9px;
+  transition: all 0.3s;
+}
+.btn-convert-to-query-submit:hover,
+.btn-convert-to-query-submit:active {
+  background-color: #e0e0e0;
+}
+.btn-convert-to-query-submit:active {
+  transform: scale(0.96);
+}
 /* ********************************** */
 /* ******** content container ******* */
 /* ********************************** */

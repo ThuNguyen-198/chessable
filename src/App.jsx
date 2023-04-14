@@ -78,6 +78,7 @@ function App() {
   const [numWhereRows, setNumWhereRows] = useState(0);
   const [isDisplayWhereCols, setIsDisplayWhereCols] = useState(false);
   const [isDisplayWhereParam, setIsDisplayWhereParam] = useState(false);
+  const [whereRowList, setWhereRowList] = useState([]);
   const displayWhereCols = () => {
     setIsDisplayWhereCols(!isDisplayWhereCols);
   };
@@ -87,6 +88,7 @@ function App() {
   const addNumWhereRow = () => {
     setNumWhereRows(numWhereRows + 1);
   };
+  const getWhereRowList = () => {};
   // Section Query - SUBMIT
   const handleConvertToQuerySubmit = () => {
     let queryString = "";
@@ -274,6 +276,7 @@ function App() {
         {/* Section Query Container */}
         <section className="query-container">
           <p className="options-bar">Query</p>
+          {/* Section select */}
           <div className="select-block">
             <p className="query-step">SELECT</p>
             <ul className="select-table-list">
@@ -361,7 +364,8 @@ function App() {
               </li>
             </ul>
           </div>
-          <div className="query-block">
+          {/* Section where */}
+          <div className="where-block">
             <p className="query-step text-icon where">
               WHERE
               <ion-icon
@@ -369,7 +373,7 @@ function App() {
                 onClick={addNumWhereRow}
               ></ion-icon>
             </p>
-            <div className="where-block">
+            <div className="where-container">
               {[...Array(numWhereRows)].map((row, index) => (
                 <form className="where-row" key={index}>
                   <div className="where-col">
