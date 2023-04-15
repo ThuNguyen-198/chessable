@@ -1,6 +1,7 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
+import axios from "axios";
 
 function App() {
   // Section Query
@@ -90,6 +91,8 @@ function App() {
   // Section Result - Nav
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
   const [isDisplaySearchBar, setIsDisplaySearchBar] = useState(false);
+  const [tableToDisplay, setTableToDisplay] = useState([]);
+  /*
   const [tableToDisplay, setTableToDisplay] = useState([
     {
       playerID: "1",
@@ -107,9 +110,24 @@ function App() {
       totalLoses: "adf",
       totalDraws: "adw",
     },
-  ]);
+  ]);*/
+
   const [resultTableKeys, setResultTableKeys] = useState([]);
-  const displayTable = () => {
+  const [displayResultsTable, setDisplayResultsTable] = useState(false);
+
+  const displayTable = async (tableName) => {
+    const response = await fetch("http://localhost:3000/" + tableName);
+    const data = await response.json();
+    setTableToDisplay(data);
+    setResultTableKeys(Object.keys(tableToDisplay[0]));
+    setIsDisplayTableMenu(!isDisplayTableMenu);
+  };
+
+  useEffect(() => {
+    setDisplayResultsTable(true);
+  }, [tableToDisplay]);
+
+  /*
     setTableToDisplay([
       {
         playerID: "1",
@@ -191,10 +209,10 @@ function App() {
         totalLoses: "adf",
         totalDraws: "adw",
       },
-    ]);
-    setResultTableKeys(Object.keys(tableToDisplay[0]));
-    setIsDisplayTableMenu(!isDisplayTableMenu);
-  };
+    ]);*/
+
+  //setResultTableKeys(Object.keys(tableToDisplay[0]));
+
   const displaySearchBar = () => {
     setIsDisplaySearchBar(!isDisplaySearchBar);
     console.log(isDisplaySearchBar);
@@ -362,11 +380,11 @@ function App() {
           <div className="options-bar">
             {isDisplayTableMenu ? (
               <ul className="dropdown-table-menu">
-                <li onClick={displayTable}>Players</li>
-                <li onClick={displayTable}>Games</li>
-                <li onClick={displayTable}>Tournaments</li>
-                <li onClick={displayTable}>Openings</li>
-                <li onClick={displayTable}>Sponsors</li>
+                <li onClick={() => displayTable("players")}>Players</li>
+                <li onClick={() => displayTable("games")}>Games</li>
+                <li onClick={() => displayTable("tournaments")}>Tournaments</li>
+                <li onClick={() => displayTable("openings")}>Openings</li>
+                <li onClick={() => displayTable("sponsors")}>Sponsors</li>
               </ul>
             ) : (
               <></>
@@ -397,23 +415,24 @@ function App() {
             />
             <button onClick={handleQuerySubmit}>Submit</button>
           </form>
+
           <div className="results">
             <table>
               <thead>
                 <tr>
-                  {resultTableKeys.map((key) => (
-                    <th key={key}>{key}</th>
-                  ))}
+                  {resultTableKeys &&
+                    resultTableKeys.map((key) => <th key={key}>{key}</th>)}
                 </tr>
               </thead>
               <tbody>
-                {tableToDisplay.map((row, index) => (
-                  <tr key={index}>
-                    {resultTableKeys.map((key) => (
-                      <td key={key}>{row[key]}</td>
-                    ))}
-                  </tr>
-                ))}
+                {tableToDisplay &&
+                  tableToDisplay.map((row, index) => (
+                    <tr key={index}>
+                      {resultTableKeys.map((key) => (
+                        <td key={key}>{row[key]}</td>
+                      ))}
+                    </tr>
+                  ))}
               </tbody>
             </table>
           </div>

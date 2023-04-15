@@ -2,8 +2,10 @@ const dotenv = require("dotenv");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
+const cors = require("cors");
 
 app.use(express.json());
+app.use(cors());
 
 dotenv.config();
 //Initialize routes
