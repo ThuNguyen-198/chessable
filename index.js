@@ -1,27 +1,25 @@
-require("dotenv").config();
-
+const dotenv = require("dotenv");
 const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
-const connection = require("./database");
+const cors = require("cors");
+
+app.use(express.json());
+app.use(cors());
 
 dotenv.config();
 //Initialize routes
-const gamesRoute = require("./routes/games");
-const openingsRoute = require("./routes/openings");
-const playerRoute = require("./routes/players");
-const tournamentRoute = require("./routes/tournaments");
-const sponsorRoute = require("./routes/sponsors");
-
-app.get("/", (req, res) =>
-  res.send("Try: /status, /warehouses, or /warehouses/2")
-);
+const gamesRoute = require("./public/backend/routes/games");
+const openingsRoute = require("./public/backend/routes/openings");
+const playerRoute = require("./public/backend/routes/players");
+const tournamentRoute = require("./public/backend/routes/tournaments");
+const sponsorRoute = require("./public/backend/routes/sponsors");
 
 app.get("/status", (req, res) => res.send("Success."));
 
 //GET TABLES ROUTES
 
-const port = process.env.PORT || 8080;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App is running at: http://localhost:${port}`);
 });
