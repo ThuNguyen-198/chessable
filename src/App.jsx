@@ -90,7 +90,7 @@ function App() {
     setNumWhereRows(numWhereRows + 1);
   };
   const getWhereRowList = () => {};
-  // Section Query - SUBMIT
+  // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
     let queryString = "";
     let selectString = "SELECT ";
