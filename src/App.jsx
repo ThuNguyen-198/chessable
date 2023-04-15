@@ -268,8 +268,8 @@ function App() {
       <div className="main-nav">
         <div className="app-name">Chessable</div>
         <div className="auth">
-          <div className="btn btn-signup">Signup</div>
-          <div className="btn btn-login">Login</div>
+          <div className="btn-signup">Signup</div>
+          <div className="btn-login">Login</div>
         </div>
       </div>
       <div className="body">
