@@ -100,18 +100,19 @@ function App() {
   const [tableToDisplay, setTableToDisplay] = useState([]);
   const [resultTableKeys, setResultTableKeys] = useState([]);
   const [displayResultsTable, setDisplayResultsTable] = useState(false);
-
-  const displayTable = async (tableName) => {
-    const response = await fetch("http://localhost:3000/" + tableName);
-    const data = await response.json();
-    setTableToDisplay(data);
-    setResultTableKeys(Object.keys(tableToDisplay[0]));
-    setIsDisplayTableMenu(!isDisplayTableMenu);
-  };
+  const [tableName, setTableName] = useState("");
 
   useEffect(() => {
-    setDisplayResultsTable(true);
-  }, [tableToDisplay]);
+    const displayTable = async () => {
+      const response = await fetch("http://localhost:3000/" + tableName);
+      const data = await response.json();
+      setTableToDisplay(data);
+      setResultTableKeys(Object.keys(data[0]));
+      setIsDisplayTableMenu(!isDisplayTableMenu);
+    };
+
+    displayTable();
+  }, [tableName]);
 
   const displaySearchBar = () => {
     setIsDisplaySearchBar(!isDisplaySearchBar);
@@ -180,15 +181,16 @@ function App() {
           <div className="options-bar">
             {isDisplayTableMenu ? (
               <ul className="dropdown-table-menu">
-                <li onClick={() => displayTable("players")}>Players</li>
-                <li onClick={() => displayTable("games")}>Games</li>
-                <li onClick={() => displayTable("tournaments")}>Tournaments</li>
-                <li onClick={() => displayTable("openings")}>Openings</li>
-                <li onClick={() => displayTable("sponsors")}>Sponsors</li>
+                <li onClick={() => setTableName("players")}>Players</li>
+                <li onClick={() => setTableName("games")}>Games</li>
+                <li onClick={() => setTableName("tournaments")}>Tournaments</li>
+                <li onClick={() => setTableName("openings")}>Openings</li>
+                <li onClick={() => setTableName("sponsors")}>Sponsors</li>
               </ul>
             ) : (
               <></>
             )}
+
             <div className="text-icon" onClick={displayTableMenu}>
               Display Table
               <ion-icon name="chevron-down-outline"></ion-icon>
