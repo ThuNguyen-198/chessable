@@ -1,55 +1,111 @@
 import React from "react";
+import { useEffect } from "react";
 import { useState } from "react";
+import "./QuerySelect.css";
 
 const QuerySelect = (props) => {
-  const playerCols = [
-    "playerID",
-    "fName",
-    "lName",
-    "age",
-    "gender",
-    "phoneNo",
-    "address",
-    "rating",
-    "title",
-    "country",
-    "totalGames",
-    "totalWins",
-    "totalLoses",
-    "totalDraws",
+  const chessDB = [
+    {
+      tableName: "tournaments",
+      tableData: [
+        {
+          tournamentId: "1",
+          sponsorId: "s1",
+          name: "tournament1",
+          noPlayers: "4",
+        },
+      ],
+    },
+    {
+      tableName: "games",
+      tableData: [{ gameId: "1", whitePlayerId: "w1", name: "date" }],
+    },
+    {
+      tableName: "players",
+      tableData: [{ playerId: "1", won: "2", lose: "3" }],
+    },
   ];
-  const gamesCols = ["ECO", "name", "moves"];
-  const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
-  const [isDisplayToursCols, setIsDisplayToursCols] = useState(false);
-  const [isDisplayPlayersCols, setIsDisplayPlayersCols] = useState(false);
-  const [isDisplayOpeningsCols, setIsDisplayOpeningsCols] = useState(false);
-  const [isDisplaySponsorsCols, setIsDisplaySponsorsCols] = useState(false);
+  const [isDisplayTables, setIsDisplayTables] = useState([false, false, false]);
+  const [checkedCols, setCheckedCols] = useState([]);
 
-  const handleCheckboxPlayers = (event) => {
-    const newValue = event.target.value;
-    props.setCheckedPlayersCols([
-      ...props.checkedPlayersCols,
-      event.target.name,
-    ]);
+  const displayQueryCols = (index) => {
+    let tableState = [...isDisplayTables];
+    tableState[index] = !tableState[index];
+    setIsDisplayTables(tableState);
   };
-  const handleCheckboxGames = (event) => {
-    props.setCheckedGamesCols([...props.checkedGamesCols, event.target.name]);
-  };
-  const handlePlayersFormSubmit = (event) => {
+  const handleOnChange = (event, index, colName) => {
     event.preventDefault();
+    let data = [...checkedCols];
+    data[index].tableCols = {
+      ...data[index].tableCols,
+      [colName]: !checkedCols[index].tableCols[colName],
+    };
+    setCheckedCols(data);
+    console.log(checkedCols);
   };
-  const displayQueryCols = (tableName) => {
-    if (tableName === "players") setIsDisplayPlayersCols(!isDisplayPlayersCols);
-    else if (tableName === "games") setIsDisplayGamesCols(!isDisplayGamesCols);
-    else if (tableName === "tournaments")
-      setIsDisplayToursCols(!isDisplayToursCols);
-    else if (tableName === "sponsors")
-      setIsDisplaySponsorsCols(!isDisplaySponsorsCols);
-    else if (tableName === "openings")
-      setIsDisplayOpeningsCols(!isDisplayOpeningsCols);
-  };
+  useEffect(() => {
+    const data = [];
+    chessDB.map((table, index) => {
+      const tableName = table.tableName;
+      const tableCols = {};
+      Object.entries(table.tableData[0]).map(([name], i) => {
+        tableCols[name] = false;
+      });
+      data.push({ tableName, tableCols });
+    });
+    setCheckedCols(data);
+  }, []);
+
   return (
     <div className="select-block">
+      <p className="query-step">SELECT</p>
+      <form>
+        {chessDB.map((table, index) => (
+          <div key={index}>
+            <div
+              className="text-icon table-name"
+              onClick={() => displayQueryCols(index)}
+            >
+              {chessDB[index].tableName}
+              <ion-icon name="chevron-down-outline"></ion-icon>
+            </div>
+            {isDisplayTables[index] ? (
+              <div className="table-cols">
+                {Object.entries(table.tableData[0]).map(([colName], i) => (
+                  <label key={i}>
+                    <input
+                      type="checkbox"
+                      onChange={(event) =>
+                        handleOnChange(event, index, colName)
+                      }
+                      name={colName}
+                      checked={checkedCols[index].tableCols[colName]}
+                    />
+                    {colName}
+                  </label>
+                ))}
+              </div>
+            ) : (
+              <></>
+            )}
+          </div>
+        ))}
+      </form>
+    </div>
+  );
+};
+
+export default QuerySelect;
+
+// const gamesCols = ["ECO", "name", "moves"];
+// const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
+// const [isDisplayToursCols, setIsDisplayToursCols] = useState(false);
+// const [isDisplayPlayersCols, setIsDisplayPlayersCols] = useState(false);
+// const [isDisplayOpeningsCols, setIsDisplayOpeningsCols] = useState(false);
+// const [isDisplaySponsorsCols, setIsDisplaySponsorsCols] = useState(false);
+
+// {
+/* <div className="select-block">
       <p className="query-step">SELECT</p>
       <ul className="select-table-list">
         <li>
@@ -133,8 +189,5 @@ const QuerySelect = (props) => {
           </div>
         </li>
       </ul>
-    </div>
-  );
-};
-
-export default QuerySelect;
+    </div> */
+// }
