@@ -80,14 +80,16 @@ function App() {
     //Handle querySring
     queryString = selectString + fromString + whereString + groupByString;
     //queryString = selectString + fromString;
-    const requestOptions = {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ query: queryString }),
-    };
-    fetch("http://localhost:3000/query", requestOptions)
-      .then((response) => response.json())
-      .then((data) => console.log(data));
+
+    axios
+      .post("http://localhost:3000/query", { query: query })
+      .then((response) => {
+        console.log(response.data);
+        setTableToDisplay(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setQuery(queryString);
   };
 
@@ -122,7 +124,17 @@ function App() {
   const handleQueryChange = (event) => {
     setQuery(event.target.value);
   };
-  const handleQuerySubmit = () => {};
+  const handleQuerySubmit = () => {
+    axios
+      .post("http://localhost:3000/query", { query: query })
+      .then((response) => {
+        console.log(response.data);
+        setTableToDisplay(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   // Section Graphs
 
   // const [conditionQuery, setConditionQuery] = useState([]);
@@ -201,7 +213,9 @@ function App() {
               value={query}
               onChange={handleQueryChange}
             />
-            <button onClick={handleQuerySubmit}>Submit</button>
+            <button type="button" onClick={handleQuerySubmit}>
+              Submit
+            </button>
           </form>
 
           <div className="results">
