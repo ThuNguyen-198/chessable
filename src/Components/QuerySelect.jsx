@@ -25,6 +25,7 @@ const QuerySelect = (props) => {
       tableData: [{ playerId: "1", won: "2", lose: "3" }],
     },
   ];
+
   const [isDisplayTables, setIsDisplayTables] = useState([false, false, false]);
   const [checkedCols, setCheckedCols] = useState([]);
 

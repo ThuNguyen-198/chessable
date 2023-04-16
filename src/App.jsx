@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
@@ -11,6 +11,40 @@ function App() {
   // Section Query - SELECT
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
+  const [chessDBTest, setchessDBTest] = useState([]);
+
+  const allTableNamesArray = [
+    "players",
+    "games",
+    "tournaments",
+    "sponsors",
+    "openings",
+  ];
+
+  // At render - get chessDB
+  useEffect(() => {
+    const fetchAllTables = async () => {
+      allTableNamesArray.map(async (nameItem) => {
+        await axios
+          .get("http://localhost:3000/" + nameItem)
+          .then((response) => {
+            setchessDBTest((prevData) => [
+              ...prevData,
+              {
+                tableName: nameItem,
+                tableData: response.data,
+              },
+            ]);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    };
+
+    fetchAllTables();
+    console.log(chessDBTest);
+  }, []);
 
   // Section Query - WHERE
   const [whereData, setWhereData] = useState([]);
