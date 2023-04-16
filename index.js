@@ -25,10 +25,12 @@ app.listen(port, () => {
   console.log(`App is running at: http://localhost:${port}`);
 });
 
-app.get("/:query", async (req, res) => {
-  await axios.get(
-    "https://gcp-test-7l6ho2jzjq-uc.a.run.app/" + req.params.query
-  );
+app.post("/query", async (req, res) => {
+  await axios
+    .post("https://gcp-test-7l6ho2jzjq-uc.a.run.app/query", req.body)
+    .then((results) => {
+      res.status(200).json(results.data);
+    });
 });
 
 app.use("/games", gamesRoute);

@@ -191,8 +191,18 @@ function App() {
 
     //Handle querySring
     queryString = selectString + fromString + whereString + groupByString;
+    //queryString = selectString + fromString;
+    const requestOptions = {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ query: queryString }),
+    };
+    fetch("http://localhost:3000/query", requestOptions)
+      .then((response) => response.json())
+      .then((data) => console.log(data));
     setQuery(queryString);
   };
+
   // Section Result
   // Section Result - Nav
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
