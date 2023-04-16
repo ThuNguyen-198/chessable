@@ -110,8 +110,9 @@ function App() {
       setResultTableKeys(Object.keys(data[0]));
       setIsDisplayTableMenu(!isDisplayTableMenu);
     };
-
-    displayTable();
+    if (tableName !== "") {
+      displayTable();
+    }
   }, [tableName]);
 
   const displaySearchBar = () => {
