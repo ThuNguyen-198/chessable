@@ -3,6 +3,7 @@ const express = require("express");
 const app = express();
 const bodyParser = require("body-parser");
 const cors = require("cors");
+const axios = require("axios");
 
 app.use(express.json());
 app.use(cors());
@@ -22,6 +23,12 @@ app.get("/status", (req, res) => res.send("Success."));
 const port = process.env.PORT || 3000;
 app.listen(port, () => {
   console.log(`App is running at: http://localhost:${port}`);
+});
+
+app.get("/:query", async (req, res) => {
+  await axios.get(
+    "https://gcp-test-7l6ho2jzjq-uc.a.run.app/" + req.params.query
+  );
 });
 
 app.use("/games", gamesRoute);
