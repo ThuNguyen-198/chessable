@@ -5,6 +5,7 @@ import axios from "axios";
 import QuerySelect from "./Components/QuerySelect";
 import QueryWhere from "./Components/QueryWhere";
 import QueryGroupBy from "./Components/QueryGroupBy";
+import QueryFrom from "./Components/QueryFrom";
 
 function App() {
   // Section Query
@@ -12,6 +13,8 @@ function App() {
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
 
+  // Section Query - FROM
+  const [fromData, setFromData] = useState([]);
   // Section Query - WHERE
   const [whereData, setWhereData] = useState([]);
 
@@ -161,6 +164,8 @@ function App() {
             checkedGamesCols={checkedGamesCols}
             setCheckedGamesCols={setCheckedGamesCols}
           />
+          {/* Section group by */}
+          <QueryFrom fromData={fromData} setFromData={setFromData} />
           {/* Section where */}
           <QueryWhere whereData={whereData} setWhereData={setWhereData} />
 
