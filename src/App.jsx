@@ -3,6 +3,8 @@ import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
 import QuerySelect from "./Components/QuerySelect";
+import QueryWhere from "./Components/QueryWhere";
+import QueryGroupBy from "./Components/QueryGroupBy";
 
 function App() {
   // Section Query
@@ -11,72 +13,10 @@ function App() {
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
 
   // Section Query - WHERE
-  const whereConditionList = [
-    ">",
-    ">=",
-    "<",
-    "<=",
-    "BETWEEN",
-    "NOT BETWEEN",
-    "IN",
-    "NOT IN",
-    "LIKE",
-    "NOT LIKE",
-  ];
   const [whereData, setWhereData] = useState([]);
-  const handleWhereInputChange = (event, index) => {
-    event.preventDefault();
-    const { name, value } = event.target;
-    const newData = [...whereData];
-    newData[index][name] = value;
-    setWhereData(newData);
-    console.log(whereData);
-  };
-  const handleAddWhereRow = (event) => {
-    event.preventDefault();
-
-    setWhereData([
-      ...whereData,
-      {
-        whereObject: "",
-        whereCondition: "",
-        whereComparedValue: "",
-      },
-    ]);
-  };
-  const handleRemoveWhereRow = (event, index) => {
-    event.preventDefault();
-    const newData = [...whereData];
-    newData.splice(index, 1);
-    setWhereData(newData);
-  };
 
   // Section Query - GROUP BY
-  const [groupByOptionList, setGroupByOptionList] = useState([
-    "col1",
-    "col2",
-    "col3",
-  ]);
   const [groupByData, setGroupByData] = useState([]);
-  const handleGroupByInputChange = (event, index) => {
-    console.log(index);
-    event.preventDefault();
-    const newData = [...groupByData];
-    newData[index] = event.target.value;
-    setGroupByData(newData);
-    console.log(groupByData);
-  };
-
-  const handleAddGroupByRow = (event) => {
-    event.preventDefault();
-    setGroupByData([...groupByData, ""]);
-  };
-  const handleRemoveGroupByRow = (event, index) => {
-    event.preventDefault();
-    const newData = [...groupByData];
-    newData.splice(index, 1);
-    setGroupByData(newData);
-  };
 
   // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
@@ -132,9 +72,7 @@ function App() {
           " AND ";
     }
     //Handle GROUP BY STRING
-    console.log(groupByData.length);
     for (let i = 0; i < groupByData.length; i++) {
-      console.log(i);
       if (i === groupByData.length - 1) groupByString += groupByData[i];
       else groupByString = groupByString + groupByData[i] + ", ";
     }
@@ -165,21 +103,16 @@ function App() {
 
   const displaySearchBar = () => {
     setIsDisplaySearchBar(!isDisplaySearchBar);
-    console.log(isDisplaySearchBar);
   };
   const displayTableMenu = () => {
     setIsDisplayTableMenu(!isDisplayTableMenu);
-    console.log(isDisplayTableMenu);
   };
   // Section Result - Query Bar
   const [query, setQuery] = useState("");
   const handleQueryChange = (event) => {
     setQuery(event.target.value);
-    console.log(query);
   };
-  const handleQuerySubmit = () => {
-    console.log(query);
-  };
+  const handleQuerySubmit = () => {};
   // Section Graphs
 
   // const [conditionQuery, setConditionQuery] = useState([]);
@@ -206,102 +139,13 @@ function App() {
             setCheckedGamesCols={setCheckedGamesCols}
           />
           {/* Section where */}
-          <div className="where-block">
-            <form>
-              <p className="query-step text-icon where">
-                WHERE
-                <ion-icon
-                  name="add-circle-outline"
-                  onClick={handleAddWhereRow}
-                ></ion-icon>
-              </p>
-              <div className="where-container">
-                {whereData.map((row, index) => (
-                  <div className="where-row" key={index}>
-                    <select
-                      className="where-object-drop-down"
-                      id={`whereObject-${index}`}
-                      name="whereObject"
-                      value={row.whereObject}
-                      onChange={(event) => handleWhereInputChange(event, index)}
-                    >
-                      <option value="">Column</option>
-                      <option value="playerID">playerID</option>
-                      <option value="fName">fName</option>
-                      <option value="lName">lName</option>
-                    </select>
-                    <select
-                      className="where-condition-drop-down"
-                      id={`whereCondition-${index}`}
-                      name="whereCondition"
-                      value={row.whereCondition}
-                      onChange={(event) => handleWhereInputChange(event, index)}
-                    >
-                      <option key={-1} value=""></option>
-                      {whereConditionList.map((condition, i) => (
-                        <option key={i} value={condition}>
-                          {condition}
-                        </option>
-                      ))}
-                    </select>
-                    <input
-                      className="where-compared-value-drop-down"
-                      name="whereComparedValue"
-                      value={row.whereComparedValue}
-                      onChange={(event) => handleWhereInputChange(event, index)}
-                      placeholder="Some value..."
-                    ></input>
-                    <button
-                      onClick={(event) => handleRemoveWhereRow(event, index)}
-                    >
-                      <ion-icon name="trash-outline"></ion-icon>
-                    </button>
-                  </div>
-                ))}
-              </div>
-            </form>
-          </div>
-          {/* Section group by */}
-          <div className="group-by-block">
-            <p className="query-step text-icon group-by">
-              GROUP BY
-              <ion-icon
-                name="add-circle-outline"
-                onClick={handleAddGroupByRow}
-              ></ion-icon>
-            </p>
-            <div className="group-by-container">
-              <form>
-                {groupByData.map((row, index) => (
-                  <div className="group-by-row">
-                    <select
-                      className="group-by-drop-down"
-                      key={index}
-                      value={row}
-                      onChange={(event) =>
-                        handleGroupByInputChange(event, index)
-                      }
-                    >
-                      <option key={-1} value="">
-                        Select Column
-                      </option>
-                      {groupByOptionList.map((col, i) => (
-                        <option key={i} value={col}>
-                          {col}
-                        </option>
-                      ))}
-                    </select>
+          <QueryWhere whereData={whereData} setWhereData={setWhereData} />
 
-                    <button
-                      onClick={(event) => handleRemoveGroupByRow(event, index)}
-                    >
-                      <ion-icon name="trash-outline"></ion-icon>
-                    </button>
-                  </div>
-                ))}
-              </form>
-            </div>
-          </div>
+          {/* Section group by */}
+          <QueryGroupBy
+            groupByData={groupByData}
+            setGroupByData={setGroupByData}
+          />
           <button
             className="btn-convert-to-query-submit"
             onClick={handleConvertToQuerySubmit}

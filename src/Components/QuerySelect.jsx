@@ -39,16 +39,14 @@ const QuerySelect = (props) => {
     event.preventDefault();
   };
   const displayQueryCols = (tableName) => {
-    if (tableName === "players")
-      props.setIsDisplayPlayersCols(!isDisplayPlayersCols);
-    else if (tableName === "games")
-      props.setIsDisplayGamesCols(!isDisplayGamesCols);
+    if (tableName === "players") setIsDisplayPlayersCols(!isDisplayPlayersCols);
+    else if (tableName === "games") setIsDisplayGamesCols(!isDisplayGamesCols);
     else if (tableName === "tournaments")
-      props.setIsDisplayToursCols(!isDisplayToursCols);
+      setIsDisplayToursCols(!isDisplayToursCols);
     else if (tableName === "sponsors")
-      props.setIsDisplaySponsorsCols(!isDisplaySponsorsCols);
+      setIsDisplaySponsorsCols(!isDisplaySponsorsCols);
     else if (tableName === "openings")
-      props.setIsDisplayOpeningsCols(!isDisplayOpeningsCols);
+      setIsDisplayOpeningsCols(!isDisplayOpeningsCols);
   };
   return (
     <div className="select-block">
