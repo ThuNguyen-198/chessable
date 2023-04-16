@@ -31,10 +31,19 @@ function App() {
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
   const handleCheckboxPlayers = (event) => {
+    const newValue = event.target.value;
+    if (newValue === "") {
+      // handle unselected state
+    } else {
+      // handle selected state
+    }
     setCheckedPlayersCols([...checkedPlayersCols, event.target.name]);
+    console.log(checkedPlayersCols);
+    // setGroupByOptionList([...groupByOptionList, ...checkedPlayersCols]);
   };
   const handleCheckboxGames = (event) => {
     setCheckedGamesCols([...checkedGamesCols, event.target.name]);
+    // setGroupByOptionList([...groupByOptionList, ...checkedGamesCols]);
   };
   const handlePlayersFormSubmit = (event) => {
     event.preventDefault();
@@ -52,49 +61,80 @@ function App() {
   };
 
   // Section Query - WHERE
-  const whereCols = [
-    "playerID",
-    "fName",
-    "lName",
-    "age",
-    "gender",
-    "phoneNo",
-    "address",
-    "rating",
-    "title",
-    "country",
-    "totalGames",
-    "totalWins",
-    "totalLoses",
-    "totalDraws",
-  ];
-  const whereParamList = [
-    "=",
+  const whereConditionList = [
+    ">",
     ">=",
+    "<",
     "<=",
-    "contains",
-    "starts with",
-    "ends with",
+    "BETWEEN",
+    "NOT BETWEEN",
+    "IN",
+    "NOT IN",
+    "LIKE",
+    "NOT LIKE",
   ];
-  const [numWhereRows, setNumWhereRows] = useState(0);
-  const [isDisplayWhereCols, setIsDisplayWhereCols] = useState(false);
-  const [isDisplayWhereParam, setIsDisplayWhereParam] = useState(false);
-  const [whereRowList, setWhereRowList] = useState([]);
-  const displayWhereCols = () => {
-    setIsDisplayWhereCols(!isDisplayWhereCols);
+  const [whereData, setWhereData] = useState([]);
+  const handleWhereInputChange = (event, index) => {
+    event.preventDefault();
+    const { name, value } = event.target;
+    const newData = [...whereData];
+    newData[index][name] = value;
+    setWhereData(newData);
+    console.log(whereData);
   };
-  const displayWhereParam = () => {
-    setIsDisplayWhereParam(!isDisplayWhereParam);
+  const handleAddWhereRow = (event) => {
+    event.preventDefault();
+
+    setWhereData([
+      ...whereData,
+      {
+        whereObject: "",
+        whereCondition: "",
+        whereComparedValue: "",
+      },
+    ]);
   };
-  const addNumWhereRow = () => {
-    setNumWhereRows(numWhereRows + 1);
+  const handleRemoveWhereRow = (event, index) => {
+    event.preventDefault();
+    const newData = [...whereData];
+    newData.splice(index, 1);
+    setWhereData(newData);
   };
-  const getWhereRowList = () => {};
+
+  // Section Query - GROUP BY
+  const [groupByOptionList, setGroupByOptionList] = useState([
+    "col1",
+    "col2",
+    "col3",
+  ]);
+  const [groupByData, setGroupByData] = useState([]);
+  const handleGroupByInputChange = (event, index) => {
+    console.log(index);
+    event.preventDefault();
+    const newData = [...groupByData];
+    newData[index] = event.target.value;
+    setGroupByData(newData);
+    console.log(groupByData);
+  };
+
+  const handleAddGroupByRow = (event) => {
+    event.preventDefault();
+    setGroupByData([...groupByData, ""]);
+  };
+  const handleRemoveGroupByRow = (event, index) => {
+    event.preventDefault();
+    const newData = [...groupByData];
+    newData.splice(index, 1);
+    setGroupByData(newData);
+  };
+
   // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
     let queryString = "";
     let selectString = "SELECT ";
     let fromString = " FROM ";
+    let whereString = " WHERE ";
+    let groupByString = " GROUP BY ";
 
     let fromTableList = [];
     //Handle SELECT STRING
@@ -117,20 +157,40 @@ function App() {
       fromTableList = [...fromTableList, "chessDB.games"];
     }
     //Handle FROM STRING
-    console.log(fromTableList);
-    if (fromTableList.length === 1) fromString += fromTableList;
-    else {
-      for (let i = 0; i < fromTableList.length; i++) {
-        if (i === fromTableList.length - 1)
-          fromString = fromString + fromTableList[i];
-        else fromString = fromString + fromTableList[i] + " JOIN ";
-      }
+    for (let i = 0; i < fromTableList.length; i++) {
+      if (i === fromTableList.length - 1)
+        fromString = fromString + fromTableList[i];
+      else fromString = fromString + fromTableList[i] + " JOIN ";
     }
+
+    //Handle WHERE STRING
+    for (let i = 0; i < whereData.length; i++) {
+      if (i === whereData.length - 1)
+        whereString +=
+          whereData[i].whereObject +
+          " " +
+          whereData[i].whereCondition +
+          " " +
+          whereData[i].whereComparedValue;
+      else
+        whereString +=
+          whereData[i].whereObject +
+          " " +
+          whereData[i].whereCondition +
+          " " +
+          whereData[i].whereComparedValue +
+          " AND ";
+    }
+    //Handle GROUP BY STRING
+    console.log(groupByData.length);
+    for (let i = 0; i < groupByData.length; i++) {
+      console.log(i);
+      if (i === groupByData.length - 1) groupByString += groupByData[i];
+      else groupByString = groupByString + groupByData[i] + ", ";
+    }
+
     //Handle querySring
-    console.log(selectString);
-    console.log(fromString);
-    console.log(queryString);
-    queryString = selectString + fromString;
+    queryString = selectString + fromString + whereString + groupByString;
     setQuery(queryString);
   };
   // Section Result
@@ -138,26 +198,6 @@ function App() {
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
   const [isDisplaySearchBar, setIsDisplaySearchBar] = useState(false);
   const [tableToDisplay, setTableToDisplay] = useState([]);
-  /*
-  const [tableToDisplay, setTableToDisplay] = useState([
-    {
-      playerID: "1",
-      fName: "James",
-      lName: "Smith",
-      age: "18",
-      gender: "M",
-      phoneNo: "123-456-7890",
-      address: "sd",
-      rating: "5",
-      title: "ds",
-      country: "sde",
-      totalGames: "gs",
-      totalWins: "sf",
-      totalLoses: "adf",
-      totalDraws: "adw",
-    },
-  ]);*/
-
   const [resultTableKeys, setResultTableKeys] = useState([]);
   const [displayResultsTable, setDisplayResultsTable] = useState(false);
 
@@ -172,92 +212,6 @@ function App() {
   useEffect(() => {
     setDisplayResultsTable(true);
   }, [tableToDisplay]);
-
-  /*
-    setTableToDisplay([
-      {
-        playerID: "1",
-        fName: "James",
-        lName: "Smith",
-        age: "18",
-        gender: "M",
-        phoneNo: "123-456-7890",
-        address: "sd",
-        rating: "5",
-        title: "ds",
-        country: "sde",
-        totalGames: "gs",
-        totalWins: "sf",
-        totalLoses: "adf",
-        totalDraws: "adw",
-      },
-      {
-        playerID: "1",
-        fName: "James",
-        lName: "Smith",
-        age: "18",
-        gender: "M",
-        phoneNo: "123-456-7890",
-        address: "sd",
-        rating: "5",
-        title: "ds",
-        country: "sde",
-        totalGames: "gs",
-        totalWins: "sf",
-        totalLoses: "adf",
-        totalDraws: "adw",
-      },
-      {
-        playerID: "1",
-        fName: "James",
-        lName: "Smith",
-        age: "18",
-        gender: "M",
-        phoneNo: "123-456-7890",
-        address: "sd",
-        rating: "5",
-        title: "ds",
-        country: "sde",
-        totalGames: "gs",
-        totalWins: "sf",
-        totalLoses: "adf",
-        totalDraws: "adw",
-      },
-      {
-        playerID: "1",
-        fName: "James",
-        lName: "Smith",
-        age: "18",
-        gender: "M",
-        phoneNo: "123-456-7890",
-        address: "sd",
-        rating: "5",
-        title: "ds",
-        country: "sde",
-        totalGames: "gs",
-        totalWins: "sf",
-        totalLoses: "adf",
-        totalDraws: "adw",
-      },
-      {
-        playerID: "1",
-        fName: "James",
-        lName: "Smith",
-        age: "18",
-        gender: "M",
-        phoneNo: "123-456-7890",
-        address: "sd",
-        rating: "5",
-        title: "ds",
-        country: "sde",
-        totalGames: "gs",
-        totalWins: "sf",
-        totalLoses: "adf",
-        totalDraws: "adw",
-      },
-    ]);*/
-
-  //setResultTableKeys(Object.keys(tableToDisplay[0]));
 
   const displaySearchBar = () => {
     setIsDisplaySearchBar(!isDisplaySearchBar);
@@ -384,59 +338,99 @@ function App() {
           </div>
           {/* Section where */}
           <div className="where-block">
-            <p className="query-step text-icon where">
-              WHERE
+            <form>
+              <p className="query-step text-icon where">
+                WHERE
+                <ion-icon
+                  name="add-circle-outline"
+                  onClick={handleAddWhereRow}
+                ></ion-icon>
+              </p>
+              <div className="where-container">
+                {whereData.map((row, index) => (
+                  <div className="where-row" key={index}>
+                    <select
+                      className="where-object-drop-down"
+                      id={`whereObject-${index}`}
+                      name="whereObject"
+                      value={row.whereObject}
+                      onChange={(event) => handleWhereInputChange(event, index)}
+                    >
+                      <option value="">Column</option>
+                      <option value="playerID">playerID</option>
+                      <option value="fName">fName</option>
+                      <option value="lName">lName</option>
+                    </select>
+                    <select
+                      className="where-condition-drop-down"
+                      id={`whereCondition-${index}`}
+                      name="whereCondition"
+                      value={row.whereCondition}
+                      onChange={(event) => handleWhereInputChange(event, index)}
+                    >
+                      <option key={-1} value=""></option>
+                      {whereConditionList.map((condition, i) => (
+                        <option key={i} value={condition}>
+                          {condition}
+                        </option>
+                      ))}
+                    </select>
+                    <input
+                      className="where-compared-value-drop-down"
+                      name="whereComparedValue"
+                      value={row.whereComparedValue}
+                      onChange={(event) => handleWhereInputChange(event, index)}
+                      placeholder="Some value..."
+                    ></input>
+                    <button
+                      onClick={(event) => handleRemoveWhereRow(event, index)}
+                    >
+                      <ion-icon name="trash-outline"></ion-icon>
+                    </button>
+                  </div>
+                ))}
+              </div>
+            </form>
+          </div>
+          {/* Section group by */}
+          <div className="group-by-block">
+            <p className="query-step text-icon group-by">
+              GROUP BY
               <ion-icon
                 name="add-circle-outline"
-                onClick={addNumWhereRow}
+                onClick={handleAddGroupByRow}
               ></ion-icon>
             </p>
-            <div className="where-container">
-              {[...Array(numWhereRows)].map((row, index) => (
-                <form className="where-row" key={index}>
-                  <div className="where-col">
-                    <button
-                      className="text-icon"
-                      type="button"
-                      onClick={displayWhereCols}
+            <div className="group-by-container">
+              <form>
+                {groupByData.map((row, index) => (
+                  <div className="group-by-row">
+                    <select
+                      className="group-by-drop-down"
+                      key={index}
+                      value={row}
+                      onChange={(event) =>
+                        handleGroupByInputChange(event, index)
+                      }
                     >
-                      Column
-                      <ion-icon name="chevron-down-outline"></ion-icon>
-                    </button>
-                    {isDisplayWhereCols ? (
-                      <ul className="where-col-dropdown">
-                        {whereCols.map((col, i) => (
-                          <li key={i}>{col}</li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <></>
-                    )}
-                  </div>
-                  <div className="where-param">
+                      <option key={-1} value="">
+                        Select Column
+                      </option>
+                      {groupByOptionList.map((col, i) => (
+                        <option key={i} value={col}>
+                          {col}
+                        </option>
+                      ))}
+                    </select>
+
                     <button
-                      className="text-icon"
-                      type="button"
-                      onClick={displayWhereParam}
+                      onClick={(event) => handleRemoveGroupByRow(event, index)}
                     >
-                      equals
-                      <ion-icon name="chevron-down-outline"></ion-icon>
+                      <ion-icon name="trash-outline"></ion-icon>
                     </button>
-                    {isDisplayWhereParam ? (
-                      <ul className="where-param-dropdown">
-                        {whereParamList.map((condition, i) => (
-                          <li key={i} className="dropdown-item">
-                            {condition}
-                          </li>
-                        ))}
-                      </ul>
-                    ) : (
-                      <></>
-                    )}
                   </div>
-                  <input />
-                </form>
-              ))}
+                ))}
+              </form>
             </div>
           </div>
           <button
