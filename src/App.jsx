@@ -8,6 +8,27 @@ import QueryGroupBy from "./Components/QueryGroupBy";
 import QueryFrom from "./Components/QueryFrom";
 
 function App() {
+  const chessDB = [
+    {
+      tableName: "tournaments",
+      tableData: [
+        {
+          tournamentId: "1",
+          sponsorId: "s1",
+          name: "tournament1",
+          noPlayers: "4",
+        },
+      ],
+    },
+    {
+      tableName: "games",
+      tableData: [{ gameId: "1", whitePlayerId: "w1", name: "date" }],
+    },
+    {
+      tableName: "players",
+      tableData: [{ playerId: "1", won: "2", lose: "3" }],
+    },
+  ];
   // Section Query
   // Section Query - SELECT
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
@@ -159,6 +180,7 @@ function App() {
           <p className="options-bar">Query</p>
           {/* Section select */}
           <QuerySelect
+            chessDB={chessDB}
             checkedPlayersCols={checkedPlayersCols}
             setCheckedPlayersCols={setCheckedPlayersCols}
             checkedGamesCols={checkedGamesCols}
