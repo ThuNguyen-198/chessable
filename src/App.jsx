@@ -79,8 +79,20 @@ function App() {
 
     //Handle querySring
     queryString = selectString + fromString + whereString + groupByString;
+    //queryString = selectString + fromString;
+
+    axios
+      .post("http://localhost:3000/query", { query: query })
+      .then((response) => {
+        console.log(response.data);
+        setTableToDisplay(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
     setQuery(queryString);
   };
+
   // Section Result
   // Section Result - Nav
   const [isDisplayTableMenu, setIsDisplayTableMenu] = useState(false);
@@ -112,7 +124,17 @@ function App() {
   const handleQueryChange = (event) => {
     setQuery(event.target.value);
   };
-  const handleQuerySubmit = () => {};
+  const handleQuerySubmit = () => {
+    axios
+      .post("http://localhost:3000/query", { query: query })
+      .then((response) => {
+        console.log(response.data);
+        setTableToDisplay(response.data);
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
   // Section Graphs
 
   // const [conditionQuery, setConditionQuery] = useState([]);
@@ -191,7 +213,9 @@ function App() {
               value={query}
               onChange={handleQueryChange}
             />
-            <button onClick={handleQuerySubmit}>Submit</button>
+            <button type="button" onClick={handleQuerySubmit}>
+              Submit
+            </button>
           </form>
 
           <div className="results">
