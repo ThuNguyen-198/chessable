@@ -199,6 +199,7 @@ function App() {
       .then((response) => {
         console.log(response.data);
         setTableToDisplay(response.data);
+        setResultTableKeys(Object.keys(response.data[0]));
       })
       .catch((error) => {
         console.log(error);
