@@ -5,13 +5,36 @@ import axios from "axios";
 import QuerySelect from "./Components/QuerySelect";
 import QueryWhere from "./Components/QueryWhere";
 import QueryGroupBy from "./Components/QueryGroupBy";
+import QueryFrom from "./Components/QueryFrom";
 
 function App() {
+  /*
+  const chessDB = [
+    {
+      tableName: "tournaments",
+      tableData: [
+        {
+          tournamentId: "1",
+          sponsorId: "s1",
+          name: "tournament1",
+          noPlayers: "4",
+        },
+      ],
+    },
+    {
+      tableName: "games",
+      tableData: [{ gameId: "1", whitePlayerId: "w1", name: "date" }],
+    },
+    {
+      tableName: "players",
+      tableData: [{ playerId: "1", won: "2", lose: "3" }],
+    },
+  ];*/
   // Section Query
   // Section Query - SELECT
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
-  const [chessDBTest, setchessDBTest] = useState([]);
+  const [chessDB, setchessDB] = useState([]);
 
   const allTableNamesArray = [
     "players",
@@ -23,34 +46,37 @@ function App() {
 
   // At render - get chessDB
   useEffect(() => {
-    const fetchAllTables = async () => {
-      allTableNamesArray.map(async (nameItem) => {
-        await axios
-          .get("http://localhost:3000/" + nameItem)
-          .then((response) => {
-            setchessDBTest((prevData) => [
-              ...prevData,
-              {
-                tableName: nameItem,
-                tableData: response.data,
-              },
-            ]);
-          })
-          .catch((error) => {
-            console.log(error);
-          });
-      });
-    };
-
     fetchAllTables();
-    console.log(chessDBTest);
   }, []);
 
+  // Section Query - FROM
+  const [fromData, setFromData] = useState([]);
   // Section Query - WHERE
   const [whereData, setWhereData] = useState([]);
 
   // Section Query - GROUP BY
   const [groupByData, setGroupByData] = useState([]);
+
+  //Handle getting chessDB
+  const fetchAllTables = () => {
+    setchessDB([]);
+    allTableNamesArray.map(async (nameItem) => {
+      await axios
+        .get("http://localhost:3000/" + nameItem)
+        .then((response) => {
+          setchessDB((prevData) => [
+            ...prevData,
+            {
+              tableName: nameItem,
+              tableData: response.data,
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  };
 
   // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
@@ -191,11 +217,14 @@ function App() {
           <p className="options-bar">Query</p>
           {/* Section select */}
           <QuerySelect
+            chessDB={chessDB}
             checkedPlayersCols={checkedPlayersCols}
             setCheckedPlayersCols={setCheckedPlayersCols}
             checkedGamesCols={checkedGamesCols}
             setCheckedGamesCols={setCheckedGamesCols}
           />
+          {/* Section group by */}
+          <QueryFrom fromData={fromData} setFromData={setFromData} />
           {/* Section where */}
           <QueryWhere whereData={whereData} setWhereData={setWhereData} />
 

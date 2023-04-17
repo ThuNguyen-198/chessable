@@ -4,28 +4,6 @@ import { useState } from "react";
 import "./QuerySelect.css";
 
 const QuerySelect = (props) => {
-  const chessDB = [
-    {
-      tableName: "tournaments",
-      tableData: [
-        {
-          tournamentId: "1",
-          sponsorId: "s1",
-          name: "tournament1",
-          noPlayers: "4",
-        },
-      ],
-    },
-    {
-      tableName: "games",
-      tableData: [{ gameId: "1", whitePlayerId: "w1", name: "date" }],
-    },
-    {
-      tableName: "players",
-      tableData: [{ playerId: "1", won: "2", lose: "3" }],
-    },
-  ];
-
   const [isDisplayTables, setIsDisplayTables] = useState([false, false, false]);
   const [checkedCols, setCheckedCols] = useState([]);
 
@@ -46,7 +24,7 @@ const QuerySelect = (props) => {
   };
   useEffect(() => {
     const data = [];
-    chessDB.map((table, index) => {
+    props.chessDB.map((table, index) => {
       const tableName = table.tableName;
       const tableCols = {};
       Object.entries(table.tableData[0]).map(([name], i) => {
@@ -61,13 +39,13 @@ const QuerySelect = (props) => {
     <div className="select-block">
       <p className="query-step">SELECT</p>
       <form>
-        {chessDB.map((table, index) => (
+        {props.chessDB.map((table, index) => (
           <div key={index}>
             <div
               className="text-icon table-name"
               onClick={() => displayQueryCols(index)}
             >
-              {chessDB[index].tableName}
+              {props.chessDB[index].tableName}
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
             {isDisplayTables[index] ? (
