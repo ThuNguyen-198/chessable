@@ -71,7 +71,9 @@ function App() {
     fetchAllTables();
   }, []);
 
-
+  useEffect(() => {
+    console.log(chessDB);
+  }, [chessDB]);
   // Section Query - FROM
   const [fromData, setFromData] = useState([]);
   // Section Query - WHERE

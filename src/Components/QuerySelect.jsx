@@ -5,6 +5,7 @@ import "./QuerySelect.css";
 
 const QuerySelect = (props) => {
   const [isDisplayTables, setIsDisplayTables] = useState([false, false, false]);
+  const [checkedCols, setCheckedCols] = useState([]);
 
   const displayQueryCols = (index) => {
     let tableState = [...isDisplayTables];
@@ -18,7 +19,7 @@ const QuerySelect = (props) => {
       ...data[index].tableCols,
       [colName]: !props.checkedCols[index].tableCols[colName],
     };
-    props.setCheckedCols(data);
+    setCheckedCols(data);
   };
   useEffect(() => {
     const data = [];
@@ -30,7 +31,7 @@ const QuerySelect = (props) => {
       });
       data.push({ tableName, tableCols });
     });
-    props.setCheckedCols(data);
+    setCheckedCols(data);
   }, []);
 
   useEffect(() => {
@@ -41,40 +42,41 @@ const QuerySelect = (props) => {
   return (
     <div className="select-block">
       <p className="query-step">SELECT</p>
-
-      <form>
-        {props.chessDB.map((table, index) => (
-          <div key={index}>
-            <div
-              className="text-icon table-name"
-              onClick={() => displayQueryCols(index)}
-            >
-              {props.chessDB[index].tableName}
-              <ion-icon name="chevron-down-outline"></ion-icon>
-            </div>
-
-            {isDisplayTables[index] ? (
-              <div className="table-cols">
-                {Object.entries(table.tableData[0]).map(([colName], i) => (
-                  <label key={i}>
-                    <input
-                      type="checkbox"
-                      onChange={(event) =>
-                        handleOnChange(event, index, colName)
-                      }
-                      name={colName}
-                      checked={checkedCols[index].tableCols[colName]}
-                    />
-                    {colName}
-                  </label>
-                ))}
+      {props.chessDB && checkedCols && (
+        <form>
+          {props.chessDB.map((table, index) => (
+            <div key={index}>
+              <div
+                className="text-icon table-name"
+                onClick={() => displayQueryCols(index)}
+              >
+                {props.chessDB[index].tableName}
+                <ion-icon name="chevron-down-outline"></ion-icon>
               </div>
-            ) : (
-              <></>
-            )}
-          </div>
-        ))}
-      </form>
+
+              {isDisplayTables[index] ? (
+                <div className="table-cols">
+                  {Object.entries(table.tableData[0]).map(([colName], i) => (
+                    <label key={i}>
+                      <input
+                        type="checkbox"
+                        onChange={(event) =>
+                          handleOnChange(event, index, colName)
+                        }
+                        name={colName}
+                        checked={checkedCols[index].tableCols[colName]}
+                      />
+                      {colName}
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ))}
+        </form>
+      )}
     </div>
   );
 };
