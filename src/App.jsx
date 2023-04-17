@@ -174,6 +174,7 @@ function App() {
       setResultTableKeys(Object.keys(data[0]));
       setIsDisplayTableMenu(!isDisplayTableMenu);
     };
+
     if (tableName !== "") {
       displayTable();
     }
@@ -182,6 +183,15 @@ function App() {
   const displaySearchBar = () => {
     setIsDisplaySearchBar(!isDisplaySearchBar);
   };
+
+  const displayAudit = async () => {
+    const response = await fetch("http://localhost:3000/sponsors/audit");
+    const data = await response.json();
+    setTableToDisplay(data);
+    setResultTableKeys(Object.keys(data[0]));
+    setIsDisplayTableMenu(!isDisplayTableMenu);
+  };
+
   const displayTableMenu = () => {
     setIsDisplayTableMenu(!isDisplayTableMenu);
   };
@@ -203,10 +213,9 @@ function App() {
       });
   };
   // Section Result - Table To Display
-  const handleDeleteTableToDisplayRow = (index) => {
-    console.log(index);
+  const handleDeleteTableToDisplayRow = (row) => {
     axios
-      .delete("http://localhost:3000/sponsors/delete/" + index)
+      .delete("http://localhost:3000/sponsors/delete/" + row.sponsorID)
       .then((response) => {
         alert("Row deleted!");
       })
@@ -272,6 +281,7 @@ function App() {
                 <li onClick={() => setTableName("tournaments")}>Tournaments</li>
                 <li onClick={() => setTableName("openings")}>Openings</li>
                 <li onClick={() => setTableName("sponsors")}>Sponsors</li>
+                <li onClick={displayAudit}>Sponsors Audit</li>
               </ul>
             ) : (
               <></>
@@ -323,7 +333,7 @@ function App() {
                       ))}
                       <div
                         className="row-menu"
-                        onClick={() => handleDeleteTableToDisplayRow(index)}
+                        onClick={() => handleDeleteTableToDisplayRow(row)}
                       >
                         <ion-icon name="trash-outline"></ion-icon>
                       </div>

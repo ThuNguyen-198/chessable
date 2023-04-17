@@ -22,7 +22,7 @@ router.get("/audit", async (req, res) => {
       res.status(200).json(results.data);
     })
     .catch((error) => {
-      console.log(error);
+      coznsole.log(error);
     });
 });
 
@@ -32,7 +32,7 @@ router.delete("/delete/:sponsorID", async (req, res) => {
       data: req.params,
     })
     .then((results) => {
-      res.status(200).json(results);
+      res.status(200).json(results.data);
     })
     .catch((error) => {
       console.log(error);
