@@ -31,6 +31,7 @@ const QuerySelect = (props) => {
       data.push({ tableName, tableCols });
     });
     props.setCheckedCols(data);
+    console.log(props.checkedCols);
   }, []);
 
   useEffect(() => {
