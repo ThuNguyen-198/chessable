@@ -307,32 +307,38 @@ function App() {
             </button>
           </form>
 
-          <div className="results">
-            <table>
-              <thead>
-                <tr>
-                  {resultTableKeys &&
-                    resultTableKeys.map((key) => <th key={key}>{key}</th>)}
-                </tr>
-              </thead>
-              <tbody>
-                {tableToDisplay &&
-                  tableToDisplay.map((row, index) => (
-                    <tr key={index}>
-                      {resultTableKeys.map((key) => (
-                        <td key={key}>{row[key]}</td>
-                      ))}
-                      <div
-                        className="row-menu"
-                        onClick={() => handleDeleteTableToDisplayRow(row)}
-                      >
-                        <ion-icon name="trash-outline"></ion-icon>
-                      </div>
-                    </tr>
-                  ))}
-              </tbody>
-            </table>
-          </div>
+          {tableToDisplay ? (
+            <div className="results">
+              <table>
+                <thead>
+                  <tr>
+                    {resultTableKeys &&
+                      resultTableKeys.map((key) => <th key={key}>{key}</th>)}
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableToDisplay &&
+                    tableToDisplay.map((row, index) => (
+                      <tr key={index}>
+                        {resultTableKeys.map((key) => (
+                          <td key={key}>{row[key]}</td>
+                        ))}
+                        <div
+                          className="row-menu"
+                          onClick={() => handleDeleteTableToDisplayRow(row)}
+                        >
+                          <ion-icon name="trash-outline"></ion-icon>
+                        </div>
+                      </tr>
+                    ))}
+                </tbody>
+              </table>
+            </div>
+          ) : (
+            <div>
+              <h1>No table retrieved.</h1>
+            </div>
+          )}
         </section>
         {/* Section Graphs Container */}
 
