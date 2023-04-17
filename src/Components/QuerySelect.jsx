@@ -52,6 +52,7 @@ const QuerySelect = (props) => {
               {props.chessDB[index].tableName}
               <ion-icon name="chevron-down-outline"></ion-icon>
             </div>
+
             {isDisplayTables[index] ? (
               <div className="table-cols">
                 {Object.entries(table.tableData[0]).map(([colName], i) => (
@@ -62,36 +63,18 @@ const QuerySelect = (props) => {
                         handleOnChange(event, index, colName)
                       }
                       name={colName}
-                      checked={props.checkedCols[index].tableCols[colName]}
+                      checked={checkedCols[index].tableCols[colName]}
                     />
                     {colName}
                   </label>
                 ))}
-
               </div>
-              {isDisplayTables[index] ? (
-                <div className="table-cols">
-                  {Object.entries(table.tableData[0]).map(([colName], i) => (
-                    <label key={i}>
-                      <input
-                        type="checkbox"
-                        onChange={(event) =>
-                          handleOnChange(event, index, colName)
-                        }
-                        name={colName}
-                        checked={checkedCols[index].tableCols[colName]}
-                      />
-                      {colName}
-                    </label>
-                  ))}
-                </div>
-              ) : (
-                <></>
-              )}
-            </div>
-          ))}
-        </form>
-      )}
+            ) : (
+              <></>
+            )}
+          </div>
+        ))}
+      </form>
     </div>
   );
 };
