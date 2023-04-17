@@ -34,6 +34,9 @@ function App() {
   // Section Query - SELECT
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
+
+  const [checkedCols, setCheckedCols] = useState([]);
+
   const [chessDB, setchessDB] = useState([]);
 
   const allTableNamesArray = [
@@ -48,6 +51,7 @@ function App() {
   useEffect(() => {
     fetchAllTables();
   }, []);
+
 
   // Section Query - FROM
   const [fromData, setFromData] = useState([]);
@@ -81,13 +85,19 @@ function App() {
   // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
     let queryString = "";
-    let selectString = "SELECT ";
-    let fromString = " FROM ";
-    let whereString = " WHERE ";
-    let groupByString = " GROUP BY ";
+    let selectString = "";
+    let fromString = "";
+    let whereString = "";
+    let groupByString = "";
 
     let fromTableList = [];
     //Handle SELECT STRING
+    // console.log(checkedCols);
+    // checkedCols.map((table) => {
+    //   Object.entries(table.tableCols).map(([name], i) => {
+    //     console.log(table.tableData["name"]);
+    //   });
+    // });
     if (checkedPlayersCols.length > 0) {
       if (fromTableList.length > 0) selectString += ", ";
       for (let i = 0; i < checkedPlayersCols.length; i++) {
@@ -97,24 +107,18 @@ function App() {
       }
       fromTableList = [...fromTableList, "chessDB.players"];
     }
-    if (checkedGamesCols.length > 0) {
-      if (fromTableList.length > 0) selectString += ", ";
-      for (let i = 0; i < checkedGamesCols.length; i++) {
-        if (i === checkedGamesCols.length - 1)
-          selectString = selectString + checkedGamesCols[i];
-        else selectString = selectString + checkedGamesCols[i] + ", ";
-      }
-      fromTableList = [...fromTableList, "chessDB.games"];
-    }
+
     //Handle FROM STRING
-    for (let i = 0; i < fromTableList.length; i++) {
-      if (i === fromTableList.length - 1)
-        fromString = fromString + fromTableList[i];
-      else fromString = fromString + fromTableList[i] + " JOIN ";
+
+    for (let i = 0; i < fromData.length; i++) {
+      if (i === 0) fromString += " FROM ";
+      if (i === fromData.length - 1) fromString = fromString + fromData[i];
+      else fromString = fromString + fromData[i] + " JOIN ";
     }
 
     //Handle WHERE STRING
     for (let i = 0; i < whereData.length; i++) {
+      if (i === 0) whereString += " WHERE ";
       if (i === whereData.length - 1)
         whereString +=
           whereData[i].whereObject +
@@ -133,6 +137,7 @@ function App() {
     }
     //Handle GROUP BY STRING
     for (let i = 0; i < groupByData.length; i++) {
+      if (i === 0) groupByString += " GROUP BY ";
       if (i === groupByData.length - 1) groupByString += groupByData[i];
       else groupByString = groupByString + groupByData[i] + ", ";
     }
@@ -218,13 +223,15 @@ function App() {
           {/* Section select */}
           <QuerySelect
             chessDB={chessDB}
-            checkedPlayersCols={checkedPlayersCols}
-            setCheckedPlayersCols={setCheckedPlayersCols}
-            checkedGamesCols={checkedGamesCols}
-            setCheckedGamesCols={setCheckedGamesCols}
+            checkedCols={checkedCols}
+            setCheckedCols={setCheckedCols}
           />
           {/* Section group by */}
-          <QueryFrom fromData={fromData} setFromData={setFromData} />
+          <QueryFrom
+            chessDB={chessDB}
+            fromData={fromData}
+            setFromData={setFromData}
+          />
           {/* Section where */}
           <QueryWhere whereData={whereData} setWhereData={setWhereData} />
 
