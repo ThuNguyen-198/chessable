@@ -49,6 +49,25 @@ function App() {
 
   // At render - get chessDB
   useEffect(() => {
+    const fetchAllTables = async () => {
+      setchessDB([]);
+      allTableNamesArray.map(async (nameItem) => {
+        await axios
+          .get("http://localhost:3000/" + nameItem)
+          .then((response) => {
+            setchessDB((prevData) => [
+              ...prevData,
+              {
+                tableName: nameItem,
+                tableData: response.data,
+              },
+            ]);
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      });
+    };
     fetchAllTables();
   }, []);
 
@@ -62,25 +81,6 @@ function App() {
   const [groupByData, setGroupByData] = useState([]);
 
   //Handle getting chessDB
-  const fetchAllTables = () => {
-    setchessDB([]);
-    allTableNamesArray.map(async (nameItem) => {
-      await axios
-        .get("http://localhost:3000/" + nameItem)
-        .then((response) => {
-          setchessDB((prevData) => [
-            ...prevData,
-            {
-              tableName: nameItem,
-              tableData: response.data,
-            },
-          ]);
-        })
-        .catch((error) => {
-          console.log(error);
-        });
-    });
-  };
 
   // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
@@ -221,11 +221,16 @@ function App() {
         <section className="query-container">
           <p className="options-bar">Query</p>
           {/* Section select */}
-          <QuerySelect
-            chessDB={chessDB}
-            checkedCols={checkedCols}
-            setCheckedCols={setCheckedCols}
-          />
+
+          {chessDB.length == 5 && (
+            <QuerySelect
+              chessDB={chessDB}
+              checkedPlayersCols={checkedPlayersCols}
+              setCheckedPlayersCols={setCheckedPlayersCols}
+              checkedGamesCols={checkedGamesCols}
+              setCheckedGamesCols={setCheckedGamesCols}
+            />
+          )}
           {/* Section group by */}
           <QueryFrom
             chessDB={chessDB}
