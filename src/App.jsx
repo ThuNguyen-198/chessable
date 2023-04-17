@@ -59,7 +59,7 @@ function App() {
       chessDB.map((dbTable) => {
         if (fromTable === dbTable.tableName) {
           Object.entries(dbTable.tableData[0]).map(([col, value]) => {
-            newWhereCols.push(col);
+            newWhereCols.push(fromTable + "." + col);
           });
         }
       });
