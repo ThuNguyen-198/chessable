@@ -301,7 +301,8 @@ function App() {
           </div>
           <form className="writen-query">
             {/* <label>Query</label> */}
-            <input
+            <textarea
+              rows={2}
               placeholder="Write your query..."
               value={query}
               onChange={handleQueryChange}
