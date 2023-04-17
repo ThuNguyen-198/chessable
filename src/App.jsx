@@ -69,12 +69,7 @@ function App() {
       });
     };
     fetchAllTables();
-    console.log(chessDB);
   }, []);
-
-  useEffect(() => {
-    console.log(chessDB);
-  }, [chessDB]);
 
   // Section Query - FROM
   const [fromData, setFromData] = useState([]);
@@ -210,6 +205,14 @@ function App() {
   // Section Result - Table To Display
   const handleDeleteTableToDisplayRow = (index) => {
     console.log(index);
+    axios
+      .delete("http://localhost:3000/sponsors/delete/" + index)
+      .then((response) => {
+        alert("Row deleted!");
+      })
+      .catch((error) => {
+        console.log(error);
+      });
   };
   // Section Graphs
 

@@ -34,11 +34,6 @@ const QuerySelect = (props) => {
     console.log(props.checkedCols);
   }, []);
 
-  useEffect(() => {
-    console.log(props.chessDB);
-    console.log(props.checkedCols);
-  }, [props.checkedCols]);
-
   return (
     <div className="select-block">
       <p className="query-step">SELECT</p>
