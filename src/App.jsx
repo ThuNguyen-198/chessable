@@ -50,8 +50,8 @@ function App() {
   // At render - get chessDB
   useEffect(() => {
     fetchAllTables();
+    console.log(chessDB);
   }, []);
-
 
   // Section Query - FROM
   const [fromData, setFromData] = useState([]);
@@ -202,6 +202,10 @@ function App() {
         console.log(error);
       });
   };
+  // Section Result - Table To Display
+  const handleDeleteTableToDisplayRow = (index) => {
+    console.log(index);
+  };
   // Section Graphs
 
   // const [conditionQuery, setConditionQuery] = useState([]);
@@ -306,6 +310,12 @@ function App() {
                       {resultTableKeys.map((key) => (
                         <td key={key}>{row[key]}</td>
                       ))}
+                      <div
+                        className="row-menu"
+                        onClick={() => handleDeleteTableToDisplayRow(index)}
+                      >
+                        <ion-icon name="trash-outline"></ion-icon>
+                      </div>
                     </tr>
                   ))}
               </tbody>

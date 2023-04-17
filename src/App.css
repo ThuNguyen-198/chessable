@@ -334,6 +334,17 @@ table {
   font-size: 1rem;
   background-color: #107dac6d;
 }
+.row-menu {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0.4rem 0.6rem;
+  cursor: pointer;
+}
+.row-menu ion-icon {
+  font-size: 1rem;
+  color: #999;
+}
 /* ********************************** */
 /* ******** graphs container ******** */
 /* ********************************** */
