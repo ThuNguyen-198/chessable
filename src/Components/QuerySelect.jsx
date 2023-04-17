@@ -35,41 +35,48 @@ const QuerySelect = (props) => {
     setCheckedCols(data);
   }, []);
 
+  useEffect(() => {
+    console.log(props.chessDB);
+    console.log(checkedCols);
+  }, [checkedCols]);
+
   return (
     <div className="select-block">
       <p className="query-step">SELECT</p>
-      <form>
-        {props.chessDB.map((table, index) => (
-          <div key={index}>
-            <div
-              className="text-icon table-name"
-              onClick={() => displayQueryCols(index)}
-            >
-              {props.chessDB[index].tableName}
-              <ion-icon name="chevron-down-outline"></ion-icon>
-            </div>
-            {isDisplayTables[index] ? (
-              <div className="table-cols">
-                {Object.entries(table.tableData[0]).map(([colName], i) => (
-                  <label key={i}>
-                    <input
-                      type="checkbox"
-                      onChange={(event) =>
-                        handleOnChange(event, index, colName)
-                      }
-                      name={colName}
-                      checked={checkedCols[index].tableCols[colName]}
-                    />
-                    {colName}
-                  </label>
-                ))}
+      {props.chessDB && checkedCols && (
+        <form>
+          {props.chessDB.map((table, index) => (
+            <div key={index}>
+              <div
+                className="text-icon table-name"
+                onClick={() => displayQueryCols(index)}
+              >
+                {props.chessDB[index].tableName}
+                <ion-icon name="chevron-down-outline"></ion-icon>
               </div>
-            ) : (
-              <></>
-            )}
-          </div>
-        ))}
-      </form>
+              {isDisplayTables[index] ? (
+                <div className="table-cols">
+                  {Object.entries(table.tableData[0]).map(([colName], i) => (
+                    <label key={i}>
+                      <input
+                        type="checkbox"
+                        onChange={(event) =>
+                          handleOnChange(event, index, colName)
+                        }
+                        name={colName}
+                        checked={checkedCols[index].tableCols[colName]}
+                      />
+                      {colName}
+                    </label>
+                  ))}
+                </div>
+              ) : (
+                <></>
+              )}
+            </div>
+          ))}
+        </form>
+      )}
     </div>
   );
 };
