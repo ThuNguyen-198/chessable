@@ -45,8 +45,19 @@ select:focus {
   width: 100%;
   min-height: 100vh;
 }
-.app-name {
-  font-size: 1.4rem;
+.app-logo {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  height: 4rem;
+}
+.app-logo img {
+  height: 100%;
+}
+.app-logo p {
+  margin: auto 0;
+  font-size: 1.6rem;
+  align-self: center;
 }
 .auth {
   font-size: 1.4rem;

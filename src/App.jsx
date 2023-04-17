@@ -6,6 +6,7 @@ import QuerySelect from "./Components/QuerySelect";
 import QueryWhere from "./Components/QueryWhere";
 import QueryGroupBy from "./Components/QueryGroupBy";
 import QueryFrom from "./Components/QueryFrom";
+import chess from "./assets/chess.jpeg";
 
 function App() {
   // Section Query
@@ -59,7 +60,7 @@ function App() {
       chessDB.map((dbTable) => {
         if (fromTable === dbTable.tableName) {
           Object.entries(dbTable.tableData[0]).map(([col, value]) => {
-            newWhereCols.push(fromTable + "." + col);
+            newWhereCols.push(col);
           });
         }
       });
@@ -214,7 +215,10 @@ function App() {
     <div className="app-container">
       {/* Main-navigation */}
       <div className="main-nav">
-        <div className="app-name">Chessable</div>
+        <div className="app-logo">
+          <img src={chess} />
+          <p>Chessable</p>
+        </div>
         <div className="auth">
           <div className="btn-signup">Signup</div>
           <div className="btn-login">Login</div>
