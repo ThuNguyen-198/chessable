@@ -57,10 +57,12 @@ function App() {
   useEffect(() => {
     const newWhereCols = [];
     fromData.map((fromTable) => {
+      const colInit = fromTable.charAt(0);
       chessDB.map((dbTable) => {
         if (fromTable === dbTable.tableName) {
           Object.entries(dbTable.tableData[0]).map(([col, value]) => {
-            newWhereCols.push(col);
+            const name = colInit + "." + col;
+            newWhereCols.push(name);
           });
         }
       });
@@ -108,6 +110,7 @@ function App() {
     }
 
     //Handle WHERE STRING
+    console.log(whereData);
     for (let i = 0; i < whereData.length; i++) {
       if (i === 0) whereString += " WHERE ";
       if (i === whereData.length - 1)
