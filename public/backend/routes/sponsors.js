@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const dotenv = require("dotenv");
 const axios = require("axios");
-const jsonStringify = require("json-stringify-safe");
 
 router.get("", async (req, res) => {
   await axios
