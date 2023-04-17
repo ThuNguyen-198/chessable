@@ -95,7 +95,7 @@ function App() {
       if (i === 0) fromString += " FROM ";
       if (i === fromData.length - 1)
         fromString = fromString + " chessDB." + fromData[i];
-      else fromString = fromString + " chessDB." + fromData[i] + " JOINS ";
+      else fromString = fromString + " chessDB." + fromData[i] + " JOIN ";
     }
 
     //Handle WHERE STRING
