@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./App.css";
 import "bootstrap/dist/css/bootstrap.css";
 import axios from "axios";
@@ -8,6 +8,7 @@ import QueryGroupBy from "./Components/QueryGroupBy";
 import QueryFrom from "./Components/QueryFrom";
 
 function App() {
+  /*
   const chessDB = [
     {
       tableName: "tournaments",
@@ -28,12 +29,29 @@ function App() {
       tableName: "players",
       tableData: [{ playerId: "1", won: "2", lose: "3" }],
     },
-  ];
+  ];*/
   // Section Query
   // Section Query - SELECT
   const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
   const [checkedGamesCols, setCheckedGamesCols] = useState([]);
+
   const [checkedCols, setCheckedCols] = useState([]);
+
+  const [chessDB, setchessDB] = useState([]);
+
+  const allTableNamesArray = [
+    "players",
+    "games",
+    "tournaments",
+    "sponsors",
+    "openings",
+  ];
+
+  // At render - get chessDB
+  useEffect(() => {
+    fetchAllTables();
+  }, []);
+
 
   // Section Query - FROM
   const [fromData, setFromData] = useState([]);
@@ -42,6 +60,27 @@ function App() {
 
   // Section Query - GROUP BY
   const [groupByData, setGroupByData] = useState([]);
+
+  //Handle getting chessDB
+  const fetchAllTables = () => {
+    setchessDB([]);
+    allTableNamesArray.map(async (nameItem) => {
+      await axios
+        .get("http://localhost:3000/" + nameItem)
+        .then((response) => {
+          setchessDB((prevData) => [
+            ...prevData,
+            {
+              tableName: nameItem,
+              tableData: response.data,
+            },
+          ]);
+        })
+        .catch((error) => {
+          console.log(error);
+        });
+    });
+  };
 
   // Section Query - Handle string to submit
   const handleConvertToQuerySubmit = () => {
@@ -136,8 +175,9 @@ function App() {
       setResultTableKeys(Object.keys(data[0]));
       setIsDisplayTableMenu(!isDisplayTableMenu);
     };
-
-    displayTable();
+    if (tableName !== "") {
+      displayTable();
+    }
   }, [tableName]);
 
   const displaySearchBar = () => {
