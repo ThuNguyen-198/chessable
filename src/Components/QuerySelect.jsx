@@ -5,7 +5,6 @@ import "./QuerySelect.css";
 
 const QuerySelect = (props) => {
   const [isDisplayTables, setIsDisplayTables] = useState([false, false, false]);
-  const [checkedCols, setCheckedCols] = useState([]);
 
   const displayQueryCols = (index) => {
     let tableState = [...isDisplayTables];
@@ -14,13 +13,12 @@ const QuerySelect = (props) => {
   };
   const handleOnChange = (event, index, colName) => {
     event.preventDefault();
-    let data = [...checkedCols];
+    let data = [...props.checkedCols];
     data[index].tableCols = {
       ...data[index].tableCols,
-      [colName]: !checkedCols[index].tableCols[colName],
+      [colName]: !props.checkedCols[index].tableCols[colName],
     };
-    setCheckedCols(data);
-    console.log(checkedCols);
+    props.setCheckedCols(data);
   };
   useEffect(() => {
     const data = [];
@@ -32,7 +30,7 @@ const QuerySelect = (props) => {
       });
       data.push({ tableName, tableCols });
     });
-    setCheckedCols(data);
+    props.setCheckedCols(data);
   }, []);
 
   return (
@@ -58,7 +56,7 @@ const QuerySelect = (props) => {
                         handleOnChange(event, index, colName)
                       }
                       name={colName}
-                      checked={checkedCols[index].tableCols[colName]}
+                      checked={props.checkedCols[index].tableCols[colName]}
                     />
                     {colName}
                   </label>
