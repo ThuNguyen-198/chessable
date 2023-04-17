@@ -3,6 +3,8 @@ import { useState } from "react";
 
 const QueryWhere = (props) => {
   const whereConditionList = [
+    "=",
+    "!=",
     ">",
     ">=",
     "<",

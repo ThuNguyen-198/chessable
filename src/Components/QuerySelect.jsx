@@ -5,7 +5,6 @@ import "./QuerySelect.css";
 
 const QuerySelect = (props) => {
   const [isDisplayTables, setIsDisplayTables] = useState([false, false, false]);
-  const [checkedCols, setCheckedCols] = useState([]);
 
   const displayQueryCols = (index) => {
     let tableState = [...isDisplayTables];
@@ -19,7 +18,7 @@ const QuerySelect = (props) => {
       ...data[index].tableCols,
       [colName]: !props.checkedCols[index].tableCols[colName],
     };
-    setCheckedCols(data);
+    props.setCheckedCols(data);
   };
   useEffect(() => {
     const data = [];
@@ -31,18 +30,18 @@ const QuerySelect = (props) => {
       });
       data.push({ tableName, tableCols });
     });
-    setCheckedCols(data);
+    props.setCheckedCols(data);
   }, []);
 
   useEffect(() => {
     console.log(props.chessDB);
-    console.log(checkedCols);
-  }, [checkedCols]);
+    console.log(props.checkedCols);
+  }, [props.checkedCols]);
 
   return (
     <div className="select-block">
       <p className="query-step">SELECT</p>
-      {props.chessDB && checkedCols && (
+      {props.chessDB && props.checkedCols && (
         <form>
           {props.chessDB.map((table, index) => (
             <div key={index}>
@@ -64,7 +63,7 @@ const QuerySelect = (props) => {
                           handleOnChange(event, index, colName)
                         }
                         name={colName}
-                        checked={checkedCols[index].tableCols[colName]}
+                        checked={props.checkedCols[index].tableCols[colName]}
                       />
                       {colName}
                     </label>

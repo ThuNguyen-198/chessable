@@ -228,10 +228,8 @@ function App() {
           {chessDB.length == 5 && (
             <QuerySelect
               chessDB={chessDB}
-              checkedPlayersCols={checkedPlayersCols}
-              setCheckedPlayersCols={setCheckedPlayersCols}
-              checkedGamesCols={checkedGamesCols}
-              setCheckedGamesCols={setCheckedGamesCols}
+              checkedCols={checkedCols}
+              setCheckedCols={setCheckedCols}
             />
           )}
           {/* Section group by */}
