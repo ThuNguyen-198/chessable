@@ -19,13 +19,16 @@ const QuerySelect = (props) => {
       [colName]: !props.checkedCols[index].tableCols[colName],
     };
     props.setCheckedCols(data);
+
     //upDate selectData
+    console.log(props.checkedCols);
     props.setSelectData([]);
     const newSelectData = [];
     props.checkedCols.map((checkedCol) => {
+      const tableInit = checkedCol.tableName.charAt(0);
       Object.entries(checkedCol.tableCols).map(([name, value]) => {
         if (value === true) {
-          newSelectData.push(name);
+          newSelectData.push(tableInit + "." + name);
         }
       });
     });

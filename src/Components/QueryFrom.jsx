@@ -11,6 +11,7 @@ const QueryFrom = (props) => {
     const newData = [...props.fromData];
     newData[index] = event.target.value;
     props.setFromData(newData);
+    console.log(props.fromData);
   };
 
   const handleAddFromRow = (event) => {

@@ -95,8 +95,16 @@ function App() {
     for (let i = 0; i < fromData.length; i++) {
       if (i === 0) fromString += " FROM ";
       if (i === fromData.length - 1)
-        fromString = fromString + " chessDB." + fromData[i];
-      else fromString = fromString + " chessDB." + fromData[i] + " JOIN ";
+        fromString =
+          fromString + " chessDB." + fromData[i] + " " + fromData[i].charAt(0);
+      else
+        fromString =
+          fromString +
+          " chessDB." +
+          fromData[i] +
+          " " +
+          fromData[i].charAt(0) +
+          " JOIN ";
     }
 
     //Handle WHERE STRING
@@ -127,17 +135,8 @@ function App() {
 
     //Handle querySring
     queryString = selectString + fromString + whereString + groupByString;
-    //queryString = selectString + fromString;
+    console.log(queryString);
 
-    axios
-      .post("http://localhost:3000/query", { query: query })
-      .then((response) => {
-        console.log(response.data);
-        setTableToDisplay(response.data);
-      })
-      .catch((error) => {
-        console.log(error);
-      });
     setQuery(queryString);
   };
 
