@@ -2,12 +2,6 @@ import React from "react";
 import { useState } from "react";
 
 const QueryGroupBy = (props) => {
-  const [groupByOptionList, setGroupByOptionList] = useState([
-    "col1",
-    "col2",
-    "col3",
-  ]);
-
   const handleGroupByInputChange = (event, index) => {
     event.preventDefault();
     const newData = [...props.groupByData];
@@ -46,7 +40,7 @@ const QueryGroupBy = (props) => {
                 <option key={-1} value="">
                   Select Column
                 </option>
-                {groupByOptionList.map((col, i) => (
+                {props.selectData.map((col, i) => (
                   <option key={i} value={col}>
                     {col}
                   </option>

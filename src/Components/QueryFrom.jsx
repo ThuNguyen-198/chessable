@@ -5,6 +5,7 @@ import "./QueryFrom.css";
 
 const QueryFrom = (props) => {
   const fromTableList = props.chessDB.map((table) => table.tableName);
+
   const handleFromInputChange = (event, index) => {
     event.preventDefault();
     const newData = [...props.fromData];

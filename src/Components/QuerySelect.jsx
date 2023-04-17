@@ -19,7 +19,19 @@ const QuerySelect = (props) => {
       [colName]: !props.checkedCols[index].tableCols[colName],
     };
     props.setCheckedCols(data);
+    //upDate selectData
+    props.setSelectData([]);
+    const newSelectData = [];
+    props.checkedCols.map((checkedCol) => {
+      Object.entries(checkedCol.tableCols).map(([name, value]) => {
+        if (value === true) {
+          newSelectData.push(name);
+        }
+      });
+    });
+    props.setSelectData(newSelectData);
   };
+
   useEffect(() => {
     const data = [];
     props.chessDB.map((table, index) => {
@@ -33,11 +45,6 @@ const QuerySelect = (props) => {
     props.setCheckedCols(data);
     console.log(props.checkedCols);
   }, []);
-
-  useEffect(() => {
-    console.log(props.chessDB);
-    console.log(props.checkedCols);
-  }, [props.checkedCols]);
 
   return (
     <div className="select-block">
@@ -82,98 +89,3 @@ const QuerySelect = (props) => {
 };
 
 export default QuerySelect;
-
-// const gamesCols = ["ECO", "name", "moves"];
-// const [isDisplayGamesCols, setIsDisplayGamesCols] = useState(false);
-// const [isDisplayToursCols, setIsDisplayToursCols] = useState(false);
-// const [isDisplayPlayersCols, setIsDisplayPlayersCols] = useState(false);
-// const [isDisplayOpeningsCols, setIsDisplayOpeningsCols] = useState(false);
-// const [isDisplaySponsorsCols, setIsDisplaySponsorsCols] = useState(false);
-
-// {
-/* <div className="select-block">
-      <p className="query-step">SELECT</p>
-      <ul className="select-table-list">
-        <li>
-          <div
-            className="text-icon"
-            onClick={() => displayQueryCols("tournaments")}
-          >
-            Tournaments
-            <ion-icon name="chevron-down-outline"></ion-icon>
-          </div>
-        </li>
-        <li>
-          <div
-            className="text-icon select-table"
-            onClick={() => displayQueryCols("players")}
-          >
-            Players
-            <ion-icon name="chevron-down-outline"></ion-icon>
-          </div>
-          {isDisplayPlayersCols ? (
-            <form onSubmit={handlePlayersFormSubmit}>
-              {playerCols.map((col, index) => (
-                <label key={index}>
-                  <input
-                    type="checkbox"
-                    name={col}
-                    checked={props.checkedPlayersCols.col}
-                    onChange={handleCheckboxPlayers}
-                  />
-                  {col}
-                </label>
-              ))}
-            </form>
-          ) : (
-            <></>
-          )}
-        </li>
-        <li>
-          <div
-            className="text-icon select-table"
-            onClick={() => displayQueryCols("games")}
-          >
-            Games
-            <ion-icon name="chevron-down-outline"></ion-icon>
-          </div>
-          {isDisplayGamesCols ? (
-            <form>
-              {gamesCols.map((col, index) => (
-                <label key={index}>
-                  <input
-                    type="checkbox"
-                    name={col}
-                    checked={props.checkedGamesCols.col}
-                    onChange={handleCheckboxGames}
-                  />
-                  {col}
-                </label>
-              ))}
-            </form>
-          ) : (
-            <></>
-          )}
-        </li>
-
-        <li>
-          <div
-            className="text-icon"
-            onClick={() => displayQueryCols("openings")}
-          >
-            Openings
-            <ion-icon name="chevron-down-outline"></ion-icon>
-          </div>
-        </li>
-        <li>
-          <div
-            className="text-icon"
-            onClick={() => displayQueryCols("sponsors")}
-          >
-            Sponsors
-            <ion-icon name="chevron-down-outline"></ion-icon>
-          </div>
-        </li>
-      </ul>
-    </div> */
-// }

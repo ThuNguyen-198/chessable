@@ -8,33 +8,10 @@ import QueryGroupBy from "./Components/QueryGroupBy";
 import QueryFrom from "./Components/QueryFrom";
 
 function App() {
-  /*
-  const chessDB = [
-    {
-      tableName: "tournaments",
-      tableData: [
-        {
-          tournamentId: "1",
-          sponsorId: "s1",
-          name: "tournament1",
-          noPlayers: "4",
-        },
-      ],
-    },
-    {
-      tableName: "games",
-      tableData: [{ gameId: "1", whitePlayerId: "w1", name: "date" }],
-    },
-    {
-      tableName: "players",
-      tableData: [{ playerId: "1", won: "2", lose: "3" }],
-    },
-  ];*/
   // Section Query
   // Section Query - SELECT
-  const [checkedPlayersCols, setCheckedPlayersCols] = useState([]);
-  const [checkedGamesCols, setCheckedGamesCols] = useState([]);
 
+  const [selectData, setSelectData] = useState([]);
   const [checkedCols, setCheckedCols] = useState([]);
 
   const [chessDB, setchessDB] = useState([]);
@@ -69,17 +46,26 @@ function App() {
       });
     };
     fetchAllTables();
-    console.log(chessDB);
   }, []);
-
-  useEffect(() => {
-    console.log(chessDB);
-  }, [chessDB]);
 
   // Section Query - FROM
   const [fromData, setFromData] = useState([]);
   // Section Query - WHERE
+  const [whereColsToSelect, setWhereColsToSelect] = useState([]);
   const [whereData, setWhereData] = useState([]);
+  useEffect(() => {
+    const newWhereCols = [];
+    fromData.map((fromTable) => {
+      chessDB.map((dbTable) => {
+        if (fromTable === dbTable.tableName) {
+          Object.entries(dbTable.tableData[0]).map(([col, value]) => {
+            newWhereCols.push(col);
+          });
+        }
+      });
+    });
+    setWhereColsToSelect(newWhereCols);
+  }, [fromData]);
 
   // Section Query - GROUP BY
   const [groupByData, setGroupByData] = useState([]);
@@ -96,28 +82,20 @@ function App() {
 
     let fromTableList = [];
     //Handle SELECT STRING
-    // console.log(checkedCols);
-    // checkedCols.map((table) => {
-    //   Object.entries(table.tableCols).map(([name], i) => {
-    //     console.log(table.tableData["name"]);
-    //   });
-    // });
-    if (checkedPlayersCols.length > 0) {
-      if (fromTableList.length > 0) selectString += ", ";
-      for (let i = 0; i < checkedPlayersCols.length; i++) {
-        if (i === checkedPlayersCols.length - 1)
-          selectString = selectString + checkedPlayersCols[i];
-        else selectString = selectString + checkedPlayersCols[i] + ", ";
-      }
-      fromTableList = [...fromTableList, "chessDB.players"];
+
+    for (let i = 0; i < selectData.length; i++) {
+      if (i === 0) selectString += "SELECT ";
+      if (i === selectData.length - 1) selectString += selectData[i];
+      else selectString += selectData[i] + ", ";
     }
 
     //Handle FROM STRING
 
     for (let i = 0; i < fromData.length; i++) {
       if (i === 0) fromString += " FROM ";
-      if (i === fromData.length - 1) fromString = fromString + fromData[i];
-      else fromString = fromString + fromData[i] + " JOIN ";
+      if (i === fromData.length - 1)
+        fromString = fromString + " chessDB." + fromData[i];
+      else fromString = fromString + " chessDB." + fromData[i] + " JOINS ";
     }
 
     //Handle WHERE STRING
@@ -235,6 +213,8 @@ function App() {
               chessDB={chessDB}
               checkedCols={checkedCols}
               setCheckedCols={setCheckedCols}
+              selectData={selectData}
+              setSelectData={setSelectData}
             />
           )}
           {/* Section group by */}
@@ -244,12 +224,18 @@ function App() {
             setFromData={setFromData}
           />
           {/* Section where */}
-          <QueryWhere whereData={whereData} setWhereData={setWhereData} />
+          <QueryWhere
+            whereData={whereData}
+            setWhereData={setWhereData}
+            whereColsToSelect={whereColsToSelect}
+            setWhereColsToSelect={setWhereColsToSelect}
+          />
 
           {/* Section group by */}
           <QueryGroupBy
             groupByData={groupByData}
             setGroupByData={setGroupByData}
+            selectData={selectData}
           />
           <button
             className="btn-convert-to-query-submit"

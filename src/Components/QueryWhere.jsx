@@ -64,9 +64,9 @@ const QueryWhere = (props) => {
                 onChange={(event) => handleWhereInputChange(event, index)}
               >
                 <option value="">Column</option>
-                <option value="playerID">playerID</option>
-                <option value="fName">fName</option>
-                <option value="lName">lName</option>
+                {props.whereColsToSelect.map((col, index) => (
+                  <option value={col}>{col}</option>
+                ))}
               </select>
               <select
                 className="where-condition-drop-down"
