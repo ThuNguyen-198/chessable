@@ -1,0 +1,34 @@
+.from-block {
+  margin-top: 1rem;
+}
+.from ion-icon {
+  font-size: 1.4rem;
+}
+.from-row {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 4fr 0.5fr;
+  gap: 0.5rem;
+  padding: 0 2rem;
+}
+.from-drop-down {
+  width: 100%;
+  padding: 0.2rem;
+  height: 3rem;
+  border-radius: 5px;
+  border: 0.5px solid #333;
+  gap: 1rem;
+}
+.from-row button {
+  width: 100%;
+  height: 3rem;
+  border-radius: 5px;
+  border: 0.5px solid #333;
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+}
+.from-row button ion-icon {
+  width: 100%;
+  font-size: 1.4rem;
+}
